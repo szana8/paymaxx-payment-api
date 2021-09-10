@@ -15,14 +15,10 @@ use Payment\PaymentManager\Facades\PaymentManager;
 |
 */
 
-Route::post('v1/test', function() {
-    return PaymentManager::driver('paypal')
-        //->with(['test' => true])
-        ->purchase();
-});
-
-Route::middleware([])->prefix('v1')->group(function () {
 
 
+Route::middleware([])->group(function () {
+
+    Route::post('token', [\App\Http\Controllers\v1\PaymentTokenController::class, 'store']);
 
 });

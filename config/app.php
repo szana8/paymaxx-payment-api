@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'gateway_api_url' => env('PAYMAXX_GATEWAY_URL', null),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
