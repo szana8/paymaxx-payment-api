@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  #PHP Service
+  provider-workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: provider-workspace
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./docker/nginx/hosts:/etc/hosts
+    networks:
+      - paymaxx-gateway-api_app-network
+
+  #Nginx Service
+  provider-nginx:
+    image: nginx:alpine
+    container_name: provider-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./docker/nginx/hosts:/etc/hosts
+    networks:
+      paymaxx-gateway-api_app-network:
+        ipv4_address: 172.15.0.201
+
+  # Redis service
+  provider-redis:
+    image: "redis:alpine"
+    container_name: provider-redis
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - "6380:6380"
+    networks:
+      - paymaxx-gateway-api_app-network
+
+#Docker Networks
+networks:
+  paymaxx-gateway-api_app-network:
+    name: paymaxx-gateway-api_app-network
+    external: true
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
