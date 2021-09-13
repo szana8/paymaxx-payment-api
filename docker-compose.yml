@@ -34,16 +34,6 @@ services:
       paymaxx-gateway-api_app-network:
         ipv4_address: 172.15.0.201
 
-  # Redis service
-  provider-redis:
-    image: "redis:alpine"
-    container_name: provider-redis
-    command: redis-server --requirepass sOmE_sEcUrE_pAsS
-    ports:
-      - "6380:6380"
-    networks:
-      - paymaxx-gateway-api_app-network
-
 #Docker Networks
 networks:
   paymaxx-gateway-api_app-network:
