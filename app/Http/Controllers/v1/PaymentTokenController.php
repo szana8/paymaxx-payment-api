@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CreateTokenResource;
 use App\Managers\PaymentTokenServiceManager;
 use App\Presentations\TokenPresenter;
 use Illuminate\Http\Request;
@@ -24,10 +25,12 @@ class PaymentTokenController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->paymentTokenServiceManager
-            ->driver($request->get('provider'))
+        $response = $this->paymentTokenServiceManager
+            ->driver(\Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
             ->create(new TokenPresenter($request->get('data')));
+
+        return response()->json($response);
     }
 
     /**

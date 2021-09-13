@@ -2,6 +2,7 @@
 
 namespace App\Services\MiPay;
 
+use App\Presentations\CreateTokenResponse;
 use App\Presentations\TokenPresenter;
 use App\Services\TokenServiceInterface;
 use App\Transformers\MiPay\CreateTokenTransformer;
@@ -48,7 +49,7 @@ class MiPayTokenService implements TokenServiceInterface
     /**
      * @throws AuthenticationException
      */
-    public function create(TokenPresenter $tokenPresenter)
+    public function create(TokenPresenter $tokenPresenter): CreateTokenResponse
     {
         $token = $this->authenticate();
 
@@ -58,8 +59,13 @@ class MiPayTokenService implements TokenServiceInterface
             ->post(config('providers.mipay.url') . '/CreatePaymentToken', $request);
 
         if ($response->ok()) {
-            return $response->json();
+            return (new CreateTokenResponse())
+                ->setId($response->json('ID'))
+                ->setPaymentUrl($response->json('paymentURL'))
+                ->setOriginalResponse($response->json());
         }
+
+        throw $response->throw()->json();
     }
 
     public function fetch()
