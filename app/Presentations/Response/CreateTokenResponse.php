@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Presentations;
+namespace App\Presentations\Response;
+
+use App\Presentations\BasePresentationObject;
 
 class CreateTokenResponse extends BasePresentationObject
 {

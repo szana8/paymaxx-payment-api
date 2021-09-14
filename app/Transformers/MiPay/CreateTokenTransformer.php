@@ -2,8 +2,8 @@
 
 namespace App\Transformers\MiPay;
 
-use App\Presentations\TokenPresenter;
-use Symfony\Component\Mime\Exception\AddressEncoderException;
+
+use App\Presentations\Request\TokenPresenter;
 
 class CreateTokenTransformer
 {

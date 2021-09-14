@@ -2,7 +2,7 @@
 
 namespace App\Transformers\MiPay;
 
-use App\Presentations\PayerPresenter;
+use App\Presentations\Request\PayerPresenter;
 
 class CustomerMapper
 {

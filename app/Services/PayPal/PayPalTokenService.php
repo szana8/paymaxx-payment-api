@@ -9,6 +9,7 @@ class PayPalTokenService implements TokenServiceInterface
     public function authenticate()
     {
         // Get authenticate credentials from gateway
+        return 'a';
     }
 
     public function create()
@@ -24,5 +25,10 @@ class PayPalTokenService implements TokenServiceInterface
     public function cancel()
     {
         // TODO: Implement cancel() method.
+    }
+
+    public function withCredentials(array $credentials): TokenServiceInterface
+    {
+        // TODO: Implement withCredentials() method.
     }
 }

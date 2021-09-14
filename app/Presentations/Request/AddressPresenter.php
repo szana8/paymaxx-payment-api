@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Presentations;
+namespace App\Presentations\Request;
+
+use App\Presentations\BasePresentationObject;
 
 class AddressPresenter extends BasePresentationObject
 {

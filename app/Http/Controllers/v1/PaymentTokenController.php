@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CreateTokenResource;
 use App\Managers\PaymentTokenServiceManager;
-use App\Presentations\TokenPresenter;
+use App\Presentations\Request\TokenPresenter;
 use Illuminate\Http\Request;
 
 class PaymentTokenController extends Controller
@@ -21,7 +20,7 @@ class PaymentTokenController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {

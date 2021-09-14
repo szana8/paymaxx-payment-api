@@ -2,61 +2,26 @@
 
 namespace App\Services\MiPay;
 
-use App\Presentations\CreateTokenResponse;
-use App\Presentations\TokenPresenter;
+use App\Presentations\Request\TokenPresenter;
+use App\Presentations\Response\CreateTokenResponse;
 use App\Services\TokenServiceInterface;
 use App\Transformers\MiPay\CreateTokenTransformer;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
-class MiPayTokenService implements TokenServiceInterface
+class MiPayTokenService extends MiPayService implements TokenServiceInterface
 {
-    protected string $clientId;
-
-    protected string $clientSecret;
-
-    protected string $merchant;
-
     /**
      * @throws AuthenticationException
      */
-    public function authenticate(): string
-    {
-        $cacheKey = config('providers.mipay.redis_key_prefix')
-                    . $this->merchant
-                    . '_access_token';
-
-        if (Cache::get($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        $response = Http::post(config('providers.mipay.url') . '/GetAccessToken', [
-            'clientID' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
-        ]);
-
-        if ($response->ok()) {
-            Cache::put($cacheKey, $response->json()['accessToken'], 3500);
-            return $response->json()['accessToken'];
-        }
-
-        Cache::forget($cacheKey);
-
-        throw new AuthenticationException('Invalid credentials for MiPay access.');
-    }
-
-    /**
-     * @throws AuthenticationException
-     */
-    public function create(TokenPresenter $tokenPresenter): CreateTokenResponse
+    public function create(TokenPresenter $tokenPresenter)
     {
         $token = $this->authenticate();
 
         $request = (new CreateTokenTransformer($tokenPresenter))->transform();
 
         $response = Http::withToken($token)
-            ->post(config('providers.mipay.url') . '/CreatePaymentToken', $request);
+            ->post(config('providers.mipay.create_token_url') , $request);
 
         if ($response->ok()) {
             return (new CreateTokenResponse())

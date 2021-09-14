@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Presentations;
+namespace App\Presentations\Request;
 
-class ThreeDSecureTransactionPresenter
+use App\Presentations\BasePresentationObject;
+
+class ThreeDSecureTransactionPresenter extends BasePresentationObject
 {
     protected string $currency;
 

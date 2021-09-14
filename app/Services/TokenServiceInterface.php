@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Presentations\CreateTokenResponse;
-use App\Presentations\TokenPresenter;
+use App\Presentations\Request\TokenPresenter;
+
 
 interface TokenServiceInterface
 {
     public function authenticate(): string;
 
-    public function create(TokenPresenter $tokenPresenter): CreateTokenResponse;
+    public function create(TokenPresenter $tokenPresenter);
 
     public function fetch();
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Presentations;
+namespace App\Presentations\Request;
 
+use App\Presentations\BasePresentationObject;
 use Carbon\Carbon;
 
 class PayerPresenter extends BasePresentationObject
