@@ -2,19 +2,14 @@
 
 namespace App\Services\PayPal;
 
+use App\Presentations\Request\TokenPresenter;
 use App\Services\TokenServiceInterface;
 
-class PayPalTokenService implements TokenServiceInterface
+class PayPalTokenService extends PayPalService implements TokenServiceInterface
 {
-    public function authenticate()
+    public function create(TokenPresenter $tokenPresenter)
     {
-        // Get authenticate credentials from gateway
-        return 'a';
-    }
-
-    public function create()
-    {
-        // TODO: Implement create() method.
+        throw new \Exception('Test exception', 500);
     }
 
     public function fetch()
@@ -29,6 +24,10 @@ class PayPalTokenService implements TokenServiceInterface
 
     public function withCredentials(array $credentials): TokenServiceInterface
     {
-        // TODO: Implement withCredentials() method.
+        $this->clientId = $credentials['clientId'];
+        $this->clientSecret = $credentials['clientSecret'];
+        $this->merchant = $credentials['merchant'];
+
+        return $this;
     }
 }

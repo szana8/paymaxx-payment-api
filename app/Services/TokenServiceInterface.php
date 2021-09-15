@@ -11,7 +11,7 @@ interface TokenServiceInterface
 
     public function create(TokenPresenter $tokenPresenter);
 
-    public function fetch();
+    public function fetch($paymentToken);
 
     public function cancel();
 

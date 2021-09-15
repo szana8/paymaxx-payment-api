@@ -5,23 +5,41 @@ namespace App\Services\MiPay;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 abstract class MiPayService
 {
+    /**
+     * Merchant Client ID for the authentication.
+     */
     protected string $clientId;
 
+    /**
+     * Merchant Client Secret for the authentication.
+     */
     protected string $clientSecret;
 
+    /**
+     * Merchant name for the redis key generation.
+     */
     protected string $merchant;
+
+    /**
+     * Default time to live for the redis cache
+     */
+    const TTL = 3500;
 
     /**
      * @throws AuthenticationException
      */
     public function authenticate(): string
     {
-        $cacheKey = sprintf(config('providers.mipay.redis_key'),  $this->merchant);
+        Log::debug('MiPay authentication for: ' . $this->merchant);
+
+        $cacheKey = sprintf(config('providers.mipay.redis_key'), \Str::snake($this->merchant));
 
         if (Cache::get($cacheKey)) {
+            Log::debug('Get MiPay authentication from cache: ' . $cacheKey);
             return Cache::get($cacheKey);
         }
 
@@ -31,12 +49,22 @@ abstract class MiPayService
         ]);
 
         if ($response->ok()) {
-            Cache::put($cacheKey, $response->json()['accessToken'], 3500);
+            if ($response->json('error')) {
+                Log::error('Something happened during the MiPay authentication.', $response->json());
+                Cache::forget($cacheKey);
+
+                throw new AuthenticationException('Invalid credentials for MiPay access.');
+            }
+
+            Log::debug('Get access token from MiPay', $response->json());
+            Cache::put($cacheKey, $response->json()['accessToken'], self::TTL);
             return $response->json()['accessToken'];
         }
 
+        Log::error('Something happened during the MiPay authentication.', $response->json());
         Cache::forget($cacheKey);
 
         throw new AuthenticationException('Invalid credentials for MiPay access.');
     }
+
 }

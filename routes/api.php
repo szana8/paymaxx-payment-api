@@ -19,6 +19,6 @@ use Payment\PaymentManager\Facades\PaymentManager;
 
 Route::middleware([])->group(function () {
 
-    Route::post('token', [\App\Http\Controllers\v1\PaymentTokenController::class, 'store']);
+    Route::resource('tokens', \App\Http\Controllers\v1\PaymentTokenController::class);
 
 });
