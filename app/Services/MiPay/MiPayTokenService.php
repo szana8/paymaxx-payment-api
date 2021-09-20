@@ -5,14 +5,16 @@ namespace App\Services\MiPay;
 use App\Presentations\Request\TokenPresenter;
 use App\Presentations\Response\CreateTokenResponse;
 use App\Presentations\Response\FetchPaymentTokenResponse;
-use App\Services\TokenServiceInterface;
+use App\Services\Contracts\AuthenticationInterface;
+use App\Services\Contracts\TokenServiceInterface;
 use App\Transformers\MiPay\CreateTokenTransformer;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class MiPayTokenService extends MiPayService implements TokenServiceInterface
+class MiPayTokenService extends MiPayService implements TokenServiceInterface, AuthenticationInterface
 {
     /**
      * @throws AuthenticationException
@@ -44,7 +46,13 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface
         throw $response->throw()->json();
     }
 
-    public function fetch($paymentToken)
+    /**
+     * @param $paymentToken
+     * @return FetchPaymentTokenResponse
+     * @throws AuthenticationException
+     * @throws RequestException
+     */
+    public function fetch($paymentToken): FetchPaymentTokenResponse
     {
         $token = $this->authenticate();
 
@@ -61,23 +69,18 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface
             return (new FetchPaymentTokenResponse())
                 ->setId($response->json('id'))
                 ->setStatus($response->json('status'))
+                ->setExternalId($response->json('cardToken'))
                 ->setOriginalResponse($response->json());
         }
 
         throw $response->throw()->json();
     }
 
-    public function cancel()
+    /**
+     * @return JsonResponse
+     */
+    public function cancel(): JsonResponse
     {
-        // TODO: Implement cancel() method.
-    }
-
-    public function withCredentials(array $credentials): TokenServiceInterface
-    {
-        $this->clientId = $credentials['clientId'];
-        $this->clientSecret = $credentials['clientSecret'];
-        $this->merchant = $credentials['merchant'];
-
-        return $this;
+        return response()->json(['success' => true]);
     }
 }

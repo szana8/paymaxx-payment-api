@@ -8,6 +8,7 @@ use App\Presentations\Request\TokenPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class PaymentTokenController extends Controller
 {
@@ -27,7 +28,7 @@ class PaymentTokenController extends Controller
     public function store(Request $request): JsonResponse
     {
         $response = $this->paymentTokenServiceManager
-            ->driver(\Str::lower($request->get('provider')))
+            ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
             ->create(new TokenPresenter($request->get('data')));
 

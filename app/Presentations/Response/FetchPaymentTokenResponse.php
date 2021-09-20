@@ -10,7 +10,27 @@ class FetchPaymentTokenResponse extends BasePresentationObject
 
     protected string $status;
 
+    protected string $externalId;
+
     protected array $originalResponse;
+
+    /**
+     * @return string
+     */
+    public function getExternalId(): string
+    {
+        return $this->externalId;
+    }
+
+    /**
+     * @param string $externalId
+     */
+    public function setExternalId(string $externalId): self
+    {
+        $this->externalId = $externalId;
+
+        return $this;
+    }
 
     /**
      * @return string

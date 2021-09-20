@@ -3,7 +3,7 @@
 namespace App\Services\PayPal;
 
 use App\Presentations\Request\TokenPresenter;
-use App\Services\TokenServiceInterface;
+use App\Services\Contracts\TokenServiceInterface;
 
 class PayPalTokenService extends PayPalService implements TokenServiceInterface
 {

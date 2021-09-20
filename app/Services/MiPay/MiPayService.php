@@ -67,4 +67,16 @@ abstract class MiPayService
         throw new AuthenticationException('Invalid credentials for MiPay access.');
     }
 
+    /**
+     * @param array $credentials
+     * @return MiPayTokenService
+     */
+    public function withCredentials(array $credentials): self
+    {
+        $this->clientId = $credentials['clientId'];
+        $this->clientSecret = $credentials['clientSecret'];
+        $this->merchant = $credentials['merchant'];
+
+        return $this;
+    }
 }
