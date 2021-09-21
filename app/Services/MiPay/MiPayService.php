@@ -40,6 +40,7 @@ abstract class MiPayService
 
         if (Cache::get($cacheKey)) {
             Log::debug('Get MiPay authentication from cache: ' . $cacheKey);
+
             return Cache::get($cacheKey);
         }
 
@@ -58,6 +59,7 @@ abstract class MiPayService
 
             Log::debug('Get access token from MiPay', $response->json());
             Cache::put($cacheKey, $response->json()['accessToken'], self::TTL);
+
             return $response->json()['accessToken'];
         }
 

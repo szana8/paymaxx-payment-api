@@ -23,27 +23,24 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     public function create(TokenPresenter $tokenPresenter): CreateTokenResponse
     {
         $token = $this->authenticate();
-
         $request = (new CreateTokenTransformer($tokenPresenter))->transform();
-
         $response = Http::withToken($token)
             ->post(config('providers.mipay.create_token_url'), $request);
 
-
-        if ($response->ok()) {
-            if(!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
-                throw new BadRequestHttpException(
-                    $response->json('response')['Description'] . $response->json('response')['ErrorFields']
-                );
-            }
-
-            return (new CreateTokenResponse())
-                ->setId($response->json('ID'))
-                ->setPaymentUrl($response->json('paymentURL'))
-                ->setOriginalResponse($response->json());
+        if ($response->failed()) {
+            throw $response->throw()->json();
         }
 
-        throw $response->throw()->json();
+        if (!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
+            throw new BadRequestHttpException(
+                $response->json('response')['Description'] . $response->json('response')['ErrorFields']
+            );
+        }
+
+        return (new CreateTokenResponse())
+            ->setId($response->json('ID'))
+            ->setPaymentUrl($response->json('paymentURL'))
+            ->setOriginalResponse($response->json());
     }
 
     /**
@@ -55,25 +52,24 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     public function fetch($paymentToken): FetchPaymentTokenResponse
     {
         $token = $this->authenticate();
-
         $response = Http::withToken($token)
             ->get(config('providers.mipay.fetch_details') . '/' . $paymentToken);
 
-        if ($response->ok()) {
-            if(!in_array($response->json('responseCode'), ['0', '00'])) {
-                throw new BadRequestHttpException(
-                    'Error during the fetch:' . $response->json('description')
-                );
-            }
-
-            return (new FetchPaymentTokenResponse())
-                ->setId($response->json('id'))
-                ->setStatus($response->json('status'))
-                ->setExternalId($response->json('cardToken'))
-                ->setOriginalResponse($response->json());
+        if ($response->failed()) {
+            throw $response->throw()->json();
         }
 
-        throw $response->throw()->json();
+        if (!in_array($response->json('responseCode'), ['0', '00'])) {
+            throw new BadRequestHttpException(
+                'Error during the fetch:' . $response->json('description')
+            );
+        }
+
+        return (new FetchPaymentTokenResponse())
+            ->setId($response->json('id'))
+            ->setStatus($response->json('status'))
+            ->setExternalId($response->json('cardToken'))
+            ->setOriginalResponse($response->json());
     }
 
     /**
