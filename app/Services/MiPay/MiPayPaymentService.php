@@ -3,6 +3,7 @@
 namespace App\Services\MiPay;
 
 use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Response\CancelTokenResponse;
 use App\Presentations\Response\CreateTokenResponse;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\TransactionServiceInterface;
@@ -21,11 +22,8 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         $response = Http::withToken($token)
             ->post(config('providers.mipay.start_payment'), $request);
 
-
-        dd($response->json());
-
         if ($response->ok()) {
-            /*if(!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
+            if(!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
                 throw new BadRequestHttpException(
                     $response->json('response')['Description'] . $response->json('response')['ErrorFields']
                 );
@@ -34,10 +32,10 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
             return (new CreateTokenResponse())
                 ->setId($response->json('ID'))
                 ->setPaymentUrl($response->json('paymentURL'))
-                ->setOriginalResponse($response->json());*/
+                ->setOriginalResponse($response->json());
         }
 
-        //throw $response->throw()->json();
+        throw $response->throw()->json();
 
     }
 
@@ -48,6 +46,6 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
 
     public function cancel()
     {
-        // TODO: Implement cancel() method.
+        //
     }
 }

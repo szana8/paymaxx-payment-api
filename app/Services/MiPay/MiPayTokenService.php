@@ -3,8 +3,9 @@
 namespace App\Services\MiPay;
 
 use App\Presentations\Request\TokenPresenter;
+use App\Presentations\Response\CancelTokenResponse;
 use App\Presentations\Response\CreateTokenResponse;
-use App\Presentations\Response\FetchPaymentTokenResponse;
+use App\Presentations\Response\FetchTokenResponse;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\TokenServiceInterface;
 use App\Transformers\MiPay\CreateTokenTransformer;
@@ -45,11 +46,11 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
 
     /**
      * @param $paymentToken
-     * @return FetchPaymentTokenResponse
+     * @return FetchTokenResponse
      * @throws AuthenticationException
      * @throws RequestException
      */
-    public function fetch($paymentToken): FetchPaymentTokenResponse
+    public function fetch($paymentToken): FetchTokenResponse
     {
         $token = $this->authenticate();
         $response = Http::withToken($token)
@@ -65,18 +66,21 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
             );
         }
 
-        return (new FetchPaymentTokenResponse())
+        return (new FetchTokenResponse())
             ->setId($response->json('id'))
             ->setStatus($response->json('status'))
             ->setExternalId($response->json('cardToken'))
-            ->setOriginalResponse($response->json());
+            ->setOriginalResponse($response->json())
+            ->setDetails($response->json('details'));
     }
 
     /**
-     * @return JsonResponse
+     * @return CancelTokenResponse
      */
-    public function cancel(): JsonResponse
+    public function cancel(string $paymentToken): CancelTokenResponse
     {
-        return response()->json(['success' => true]);
+        return (new CancelTokenResponse())
+            ->setStatus('successful')
+            ->setOriginalResponse(['test' => 'serezsd a testem']);
     }
 }

@@ -22,6 +22,7 @@ class CreateTokenResponse extends BasePresentationObject
 
     /**
      * @param array $originalResponse
+     * @return CreateTokenResponse
      */
     public function setOriginalResponse(array $originalResponse): self
     {
@@ -40,6 +41,7 @@ class CreateTokenResponse extends BasePresentationObject
 
     /**
      * @param string $id
+     * @return CreateTokenResponse
      */
     public function setId(string $id): self
     {
@@ -58,6 +60,7 @@ class CreateTokenResponse extends BasePresentationObject
 
     /**
      * @param string $paymentUrl
+     * @return CreateTokenResponse
      */
     public function setPaymentUrl(string $paymentUrl): self
     {
@@ -65,4 +68,5 @@ class CreateTokenResponse extends BasePresentationObject
 
         return $this;
     }
+
 }

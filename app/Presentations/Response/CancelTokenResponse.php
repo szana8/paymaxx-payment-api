@@ -4,51 +4,11 @@ namespace App\Presentations\Response;
 
 use App\Presentations\BasePresentationObject;
 
-class FetchPaymentTokenResponse extends BasePresentationObject
+class CancelTokenResponse extends BasePresentationObject
 {
-    protected string $id;
-
     protected string $status;
 
-    protected string $externalId;
-
     protected array $originalResponse;
-
-    /**
-     * @return string
-     */
-    public function getExternalId(): string
-    {
-        return $this->externalId;
-    }
-
-    /**
-     * @param string $externalId
-     */
-    public function setExternalId(string $externalId): self
-    {
-        $this->externalId = $externalId;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * @return string
@@ -60,6 +20,7 @@ class FetchPaymentTokenResponse extends BasePresentationObject
 
     /**
      * @param string $status
+     * @return CancelTokenResponse
      */
     public function setStatus(string $status): self
     {
@@ -78,6 +39,7 @@ class FetchPaymentTokenResponse extends BasePresentationObject
 
     /**
      * @param array $originalResponse
+     * @return CancelTokenResponse
      */
     public function setOriginalResponse(array $originalResponse): self
     {
