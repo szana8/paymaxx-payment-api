@@ -7,8 +7,6 @@ use App\Managers\PaymentTokenServiceManager;
 use App\Presentations\Request\TokenPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PaymentTokenController extends Controller
@@ -54,25 +52,13 @@ class PaymentTokenController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
      * @param string $token
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(Request $request, string $token)
+    public function destroy(Request $request, string $token): JsonResponse
     {
         $response = $this->paymentTokenServiceManager
             ->driver(Str::lower($request->get('provider')))
