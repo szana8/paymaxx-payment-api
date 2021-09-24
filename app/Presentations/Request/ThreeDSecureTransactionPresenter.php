@@ -35,5 +35,4 @@ class ThreeDSecureTransactionPresenter extends BasePresentationObject
     {
         return $this->amount;
     }
-
 }

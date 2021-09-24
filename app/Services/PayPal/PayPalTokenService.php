@@ -4,20 +4,23 @@ namespace App\Services\PayPal;
 
 use App\Presentations\Request\TokenPresenter;
 use App\Services\Contracts\TokenServiceInterface;
+use App\Presentations\Response\FetchTokenResponse;
+use App\Presentations\Response\CancelTokenResponse;
+use App\Presentations\Response\CreateTokenResponse;
 
 class PayPalTokenService extends PayPalService implements TokenServiceInterface
 {
-    public function create(TokenPresenter $tokenPresenter)
+    public function create(TokenPresenter $tokenPresenter): CreateTokenResponse
     {
         throw new \Exception('Test exception', 500);
     }
 
-    public function fetch()
+    public function fetch($paymentToken): FetchTokenResponse
     {
         // TODO: Implement fetch() method.
     }
 
-    public function cancel()
+    public function cancel(string $paymentToken): CancelTokenResponse
     {
         // TODO: Implement cancel() method.
     }

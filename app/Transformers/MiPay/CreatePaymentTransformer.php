@@ -2,7 +2,6 @@
 
 namespace App\Transformers\MiPay;
 
-
 use App\Presentations\Request\PaymentPresenter;
 
 class CreatePaymentTransformer
@@ -11,7 +10,7 @@ class CreatePaymentTransformer
 
     public function __construct(PaymentPresenter $paymentPresenter)
     {
-       $this->paymentPresenter = $paymentPresenter;
+        $this->paymentPresenter = $paymentPresenter;
     }
 
     public function transform(): array
@@ -41,9 +40,8 @@ class CreatePaymentTransformer
                     '',
                     $this->paymentPresenter->getPayer()->getShipping()->getCountry()
                 ),
-            ))->toArray()
+            ))->toArray(),
         ];
-
 
         if ($this->paymentPresenter->getReturnUrl()) {
             $data = array_merge($data, ['returnUrl' => $this->paymentPresenter->getReturnUrl()]);

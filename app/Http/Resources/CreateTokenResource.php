@@ -19,7 +19,7 @@ class CreateTokenResource extends JsonResource
         return [
             'id' => $this->get('id'),
             'paymentUrl' => $this->get('paymentUrl'),
-            'originalResponse' => $this->get('originalResponse')
+            'originalResponse' => $this->get('originalResponse'),
         ];
     }
 }

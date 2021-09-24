@@ -2,17 +2,16 @@
 
 namespace App\Services\MiPay;
 
-use App\Presentations\Request\TokenPresenter;
-use App\Presentations\Response\CancelTokenResponse;
-use App\Presentations\Response\CreateTokenResponse;
-use App\Presentations\Response\FetchTokenResponse;
-use App\Services\Contracts\AuthenticationInterface;
-use App\Services\Contracts\TokenServiceInterface;
-use App\Transformers\MiPay\CreateTokenTransformer;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
+use App\Presentations\Request\TokenPresenter;
+use App\Services\Contracts\TokenServiceInterface;
+use App\Presentations\Response\FetchTokenResponse;
+use App\Transformers\MiPay\CreateTokenTransformer;
+use App\Presentations\Response\CancelTokenResponse;
+use App\Presentations\Response\CreateTokenResponse;
+use App\Services\Contracts\AuthenticationInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayTokenService extends MiPayService implements TokenServiceInterface, AuthenticationInterface
@@ -32,9 +31,9 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
             throw $response->throw()->json();
         }
 
-        if (!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
+        if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
             throw new BadRequestHttpException(
-                $response->json('response')['Description'] . $response->json('response')['ErrorFields']
+                $response->json('response')['Description'].$response->json('response')['ErrorFields']
             );
         }
 
@@ -54,15 +53,15 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     {
         $token = $this->authenticate();
         $response = Http::withToken($token)
-            ->get(config('providers.mipay.fetch_details') . '/' . $paymentToken);
+            ->get(config('providers.mipay.fetch_details').'/'.$paymentToken);
 
         if ($response->failed()) {
             throw $response->throw()->json();
         }
 
-        if (!in_array($response->json('responseCode'), ['0', '00'])) {
+        if (! in_array($response->json('responseCode'), ['0', '00'])) {
             throw new BadRequestHttpException(
-                'Error during the fetch:' . $response->json('description')
+                'Error during the fetch:'.$response->json('description')
             );
         }
 

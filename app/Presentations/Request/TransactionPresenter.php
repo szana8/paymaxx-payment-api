@@ -28,8 +28,7 @@ class TransactionPresenter
         $this->amount = $amount;
         $this->currency = $currency;
 
-        foreach ($lines as $line)
-        {
+        foreach ($lines as $line) {
             $this->lines[] = new TransactionLinePresenter(
                 $line['name'],
                 $line['category'],
@@ -39,7 +38,6 @@ class TransactionPresenter
             );
         }
     }
-
 
     /**
      * @return string
@@ -80,5 +78,4 @@ class TransactionPresenter
     {
         return $this->lines;
     }
-
 }

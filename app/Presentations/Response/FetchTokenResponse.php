@@ -105,6 +105,4 @@ class FetchTokenResponse extends BasePresentationObject
 
         return $this;
     }
-
-
 }

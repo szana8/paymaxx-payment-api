@@ -47,6 +47,4 @@ class CancelTokenResponse extends BasePresentationObject
 
         return $this;
     }
-
-
 }

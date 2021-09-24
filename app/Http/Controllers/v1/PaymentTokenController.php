@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\v1;
 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Managers\PaymentTokenServiceManager;
 use App\Presentations\Request\TokenPresenter;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class PaymentTokenController extends Controller
 {

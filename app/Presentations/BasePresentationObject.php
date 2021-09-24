@@ -2,12 +2,12 @@
 
 namespace App\Presentations;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\Eloquent\JsonEncodingException;
 use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\JsonEncodingException;
 
-abstract class BasePresentationObject  implements Arrayable, Jsonable, JsonSerializable
+abstract class BasePresentationObject implements Arrayable, Jsonable, JsonSerializable
 {
     /**
      * Convert the model instance to an array.
@@ -18,6 +18,7 @@ abstract class BasePresentationObject  implements Arrayable, Jsonable, JsonSeria
     {
         return get_object_vars($this);
     }
+
     /**
      * Convert the model instance to JSON.
      *
@@ -32,8 +33,10 @@ abstract class BasePresentationObject  implements Arrayable, Jsonable, JsonSeria
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw JsonEncodingException::forModel($this, json_last_error_msg());
         }
+
         return $json;
     }
+
     /**
      * Convert the object into something JSON serializable.
      *

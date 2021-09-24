@@ -2,10 +2,9 @@
 
 namespace App\Managers;
 
+use Illuminate\Support\Manager;
 use App\Services\MiPay\MiPayTokenService;
 use App\Services\PayPal\PayPalTokenService;
-use Illuminate\Support\Manager;
-use JetBrains\PhpStorm\Pure;
 
 class PaymentTokenServiceManager extends Manager
 {
@@ -38,5 +37,4 @@ class PaymentTokenServiceManager extends Manager
     {
         return new MiPayTokenService();
     }
-
 }

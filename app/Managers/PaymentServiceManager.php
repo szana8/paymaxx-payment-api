@@ -2,8 +2,8 @@
 
 namespace App\Managers;
 
-use App\Services\MiPay\MiPayPaymentService;
 use Illuminate\Support\Manager;
+use App\Services\MiPay\MiPayPaymentService;
 
 class PaymentServiceManager extends Manager
 {

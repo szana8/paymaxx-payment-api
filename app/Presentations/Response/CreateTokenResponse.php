@@ -68,5 +68,4 @@ class CreateTokenResponse extends BasePresentationObject
 
         return $this;
     }
-
 }

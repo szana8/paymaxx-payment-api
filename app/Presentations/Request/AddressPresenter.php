@@ -7,12 +7,19 @@ use App\Presentations\BasePresentationObject;
 class AddressPresenter extends BasePresentationObject
 {
     protected string $firstName;
+
     protected string $lastName;
+
     protected string $street;
+
     protected string $city;
+
     protected string $zip;
+
     protected string $phone;
+
     protected string $email;
+
     protected string $country;
 
     public function __construct(array $address)

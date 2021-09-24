@@ -2,7 +2,6 @@
 
 namespace App\Services\Contracts;
 
-
 use App\Presentations\Request\PaymentPresenter;
 
 interface TransactionServiceInterface

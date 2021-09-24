@@ -2,11 +2,8 @@
 
 namespace App\Services\PayPal;
 
-use App\Services\TokenServiceInterface;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\AuthenticationException;
 
 abstract class PayPalService
 {
@@ -25,13 +22,12 @@ abstract class PayPalService
      */
     protected string $merchant;
 
-
     /**
      * @throws AuthenticationException
      */
     public function authenticate(): string
     {
-        Log::debug('PayPal authentication for: ' . $this->merchant);
+        Log::debug('PayPal authentication for: '.$this->merchant);
 
         throw new AuthenticationException('Invalid credentials for PayPal access.');
     }

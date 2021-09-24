@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Payment\PaymentManager\Facades\PaymentManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +13,8 @@ use Payment\PaymentManager\Facades\PaymentManager;
 |
 */
 
-
-
 Route::middleware([])->group(function () {
-
     Route::resource('tokens', \App\Http\Controllers\v1\PaymentTokenController::class);
 
     Route::resource('payments', \App\Http\Controllers\v1\PaymentController::class);
-
 });

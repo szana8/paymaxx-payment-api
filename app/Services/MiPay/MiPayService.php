@@ -2,10 +2,10 @@
 
 namespace App\Services\MiPay;
 
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Auth\AuthenticationException;
 
 abstract class MiPayService
 {
@@ -25,21 +25,21 @@ abstract class MiPayService
     protected string $merchant;
 
     /**
-     * Default time to live for the redis cache
+     * Default time to live for the redis cache.
      */
-    const TTL = 3500;
+    public const TTL = 3500;
 
     /**
      * @throws AuthenticationException
      */
     public function authenticate(): string
     {
-        Log::debug('MiPay authentication for: ' . $this->merchant);
+        Log::debug('MiPay authentication for: '.$this->merchant);
 
         $cacheKey = sprintf(config('providers.mipay.redis_key'), \Str::snake($this->merchant));
 
         if (Cache::get($cacheKey)) {
-            Log::debug('Get MiPay authentication from cache: ' . $cacheKey);
+            Log::debug('Get MiPay authentication from cache: '.$cacheKey);
 
             return Cache::get($cacheKey);
         }

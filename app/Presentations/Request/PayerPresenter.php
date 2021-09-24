@@ -2,8 +2,8 @@
 
 namespace App\Presentations\Request;
 
-use App\Presentations\BasePresentationObject;
 use Carbon\Carbon;
+use App\Presentations\BasePresentationObject;
 
 class PayerPresenter extends BasePresentationObject
 {
@@ -157,5 +157,4 @@ class PayerPresenter extends BasePresentationObject
     {
         $this->channel = $channel;
     }
-
 }

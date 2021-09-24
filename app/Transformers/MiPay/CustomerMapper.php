@@ -10,46 +10,57 @@ class CustomerMapper
      * @var string
      */
     private $customerID;
+
     /**
      * @var string
      */
     private $firstName;
+
     /**
      * @var string
      */
     private $lastName;
+
     /**
      * @var string
      */
     private $email;
+
     /**
      * @var string
      */
     private $msisdn;
+
     /**
      * @var
      */
     private $billing;
+
     /**
      * @var
      */
     private $shipping;
+
     /**
      * @var string
      */
     private $ip;
+
     /**
      * @var string
      */
     private $lang;
+
     /**
      * @var string
      */
     private $status;
+
     /**
      * @var string
      */
     private $regDate;
+
     /**
      * @var string
      */

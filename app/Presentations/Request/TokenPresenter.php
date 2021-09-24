@@ -95,5 +95,4 @@ class TokenPresenter extends BasePresentationObject
     {
         return $this->threeDSecure;
     }
-
 }

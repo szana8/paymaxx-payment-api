@@ -2,13 +2,12 @@
 
 namespace App\Services\MiPay;
 
+use Illuminate\Support\Facades\Http;
 use App\Presentations\Request\PaymentPresenter;
-use App\Presentations\Response\CancelTokenResponse;
 use App\Presentations\Response\CreateTokenResponse;
 use App\Services\Contracts\AuthenticationInterface;
-use App\Services\Contracts\TransactionServiceInterface;
 use App\Transformers\MiPay\CreatePaymentTransformer;
-use Illuminate\Support\Facades\Http;
+use App\Services\Contracts\TransactionServiceInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayPaymentService extends MiPayService implements AuthenticationInterface, TransactionServiceInterface
@@ -23,9 +22,9 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
             ->post(config('providers.mipay.start_payment'), $request);
 
         if ($response->ok()) {
-            if(!in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
+            if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
                 throw new BadRequestHttpException(
-                    $response->json('response')['Description'] . $response->json('response')['ErrorFields']
+                    $response->json('response')['Description'].$response->json('response')['ErrorFields']
                 );
             }
 
@@ -36,7 +35,6 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         }
 
         throw $response->throw()->json();
-
     }
 
     public function fetch()

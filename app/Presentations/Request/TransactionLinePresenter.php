@@ -69,6 +69,4 @@ class TransactionLinePresenter
     {
         return $this->quantity;
     }
-
-
 }

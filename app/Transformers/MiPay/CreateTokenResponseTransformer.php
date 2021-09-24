@@ -21,7 +21,7 @@ class CreateTokenResponseTransformer
         return collect([
             'id' => $this->httpResponse['ID'],
             'paymentUrl' => $this->httpResponse['paymentURL'],
-            'originalResponse' => $this->httpResponse
+            'originalResponse' => $this->httpResponse,
         ]);
     }
 }

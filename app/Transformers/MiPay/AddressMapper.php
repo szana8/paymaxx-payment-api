@@ -8,18 +8,22 @@ class AddressMapper
      * @var string
      */
     private $addr1;
+
     /**
      * @var string
      */
     private $town;
+
     /**
      * @var string
      */
     private $postcode;
+
     /**
      * @var string
      */
     private $county;
+
     /**
      * @var string
      */

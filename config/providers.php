@@ -52,7 +52,7 @@ return [
         | to login to the provider. If the login is success it returns with
         | a valid access token for the future calls and an expiry date.
         */
-        'get_access_token' => env('MIPAY_URL', null) . '/GetAccessToken',
+        'get_access_token' => env('MIPAY_URL', null).'/GetAccessToken',
 
         /*
         |--------------------------------------------------------------------------
@@ -63,7 +63,7 @@ return [
         | auth token in the header. It returns back with a registration
         | form URL which contains the form for the card data.
         */
-        'create_token_url' => env('MIPAY_URL', null) . '/CreatePaymentToken',
+        'create_token_url' => env('MIPAY_URL', null).'/CreatePaymentToken',
 
         /*
         |--------------------------------------------------------------------------
@@ -74,7 +74,7 @@ return [
         | the MiPay ID of the token or payment, and it returns back the
         | status and many other information of it.
         */
-        'fetch_details' => env('MIPAY_URL', null) . '/FetchPaymentDetails',
+        'fetch_details' => env('MIPAY_URL', null).'/FetchPaymentDetails',
 
         /*
         |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
         | the payment is a one off one it will returns back with a form
         | URL with card information form.
         */
-        'start_payment' => env('MIPAY_URL', null) . '/Payment',
+        'start_payment' => env('MIPAY_URL', null).'/Payment',
 
         /*
         |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
         | You can start revert your payment if it has successes in
         | a specific time window.
         */
-        'reversal_payment' => env('MIPAY_URL', null) . '/ReversalPayment',
+        'reversal_payment' => env('MIPAY_URL', null).'/ReversalPayment',
     ],
 
 ];
