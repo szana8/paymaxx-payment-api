@@ -6,8 +6,14 @@ use App\Presentations\BasePresentationObject;
 
 class PaymentPresenter extends BasePresentationObject
 {
+    /**
+     * Customer ID in the request.
+     */
     protected string $id;
 
+    /**
+     * Registered payment token string.
+     */
     protected string|null $paymentToken;
 
     protected string $paymentMethod;

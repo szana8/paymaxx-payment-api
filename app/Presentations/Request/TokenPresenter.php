@@ -6,6 +6,9 @@ use App\Presentations\BasePresentationObject;
 
 class TokenPresenter extends BasePresentationObject
 {
+    /**
+     * Customer ID in the request.
+     */
     protected string $id;
 
     protected string $paymentMethod;

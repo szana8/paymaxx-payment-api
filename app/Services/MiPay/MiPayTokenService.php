@@ -74,6 +74,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     }
 
     /**
+     * @param string $paymentToken
      * @return CancelTokenResponse
      */
     public function cancel(string $paymentToken): CancelTokenResponse

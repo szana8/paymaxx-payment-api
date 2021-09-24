@@ -11,15 +11,26 @@ use App\Presentations\Request\TokenPresenter;
 
 class PaymentTokenController extends Controller
 {
+    /**
+     * A common token service manager class for all the providers.
+     *
+     * @var PaymentTokenServiceManager
+     */
     protected PaymentTokenServiceManager $paymentTokenServiceManager;
 
+    /**
+     * Initialize the token service manager to perform actions.
+     *
+     * @param PaymentTokenServiceManager $paymentTokenServiceManager
+     */
     public function __construct(PaymentTokenServiceManager $paymentTokenServiceManager)
     {
         $this->paymentTokenServiceManager = $paymentTokenServiceManager;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new token in the database and call the provider
+     * specific call with the request data.
      *
      * @param Request $request
      * @return JsonResponse
@@ -35,7 +46,8 @@ class PaymentTokenController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Use this endpoint for the fetch token details from
+     * the providers.
      *
      * @param Request $request
      * @param string $token
@@ -52,7 +64,7 @@ class PaymentTokenController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Start to cancel the token on the provider side.
      *
      * @param Request $request
      * @param string $token

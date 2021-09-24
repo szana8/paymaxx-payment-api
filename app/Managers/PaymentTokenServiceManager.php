@@ -29,7 +29,7 @@ class PaymentTokenServiceManager extends Manager
     }
 
     /**
-     * Driver for MiPay token actions.
+     * Driver for MiPay token provider specific actions.
      *
      * @return MiPayTokenService
      */
