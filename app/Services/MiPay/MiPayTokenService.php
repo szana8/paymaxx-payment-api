@@ -25,11 +25,10 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
         $token = $this->authenticate();
         $request = (new CreateTokenTransformer($tokenPresenter))->transform();
         $response = Http::withToken($token)
-            ->post(config('providers.mipay.create_token_url'), $request);
+            ->post(config('providers.mipay.create_token_urls'), $request);
 
         if ($response->failed()) {
             throw $response->throw()->json();
-            // Here
         }
 
         if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
