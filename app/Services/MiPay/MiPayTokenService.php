@@ -29,6 +29,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
 
         if ($response->failed()) {
             throw $response->throw()->json();
+            // Here
         }
 
         if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
