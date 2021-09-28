@@ -18,7 +18,6 @@ class CreatePaymentTransformer
         $data = [
             'id' => $this->paymentPresenter->getId(),
             'paymentMethod' => 'CC',
-            'paymentToken' => $this->paymentPresenter->getPaymentToken(),
             'description' => $this->paymentPresenter->getTransaction()->getDescription(),
             'payment' => [
                 'currency' =>  $this->paymentPresenter->getTransaction()->getCurrency(),
@@ -42,6 +41,10 @@ class CreatePaymentTransformer
                 ),
             ))->toArray(),
         ];
+
+        if ($this->paymentPresenter->getPaymentToken()) {
+            $data = array_merge($data, ['paymentToken' => $this->paymentPresenter->getPaymentToken()]);
+        }
 
         if ($this->paymentPresenter->getReturnUrl()) {
             $data = array_merge($data, ['returnUrl' => $this->paymentPresenter->getReturnUrl()]);

@@ -4,10 +4,11 @@ namespace App\Services\MiPay;
 
 use Illuminate\Support\Facades\Http;
 use App\Presentations\Request\PaymentPresenter;
-use App\Presentations\Response\CreateTokenResponse;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Transformers\MiPay\CreatePaymentTransformer;
 use App\Services\Contracts\TransactionServiceInterface;
+use App\Presentations\Response\CreateOneOffPaymentResponse;
+use App\Presentations\Response\CreateTokenizedPaymentResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayPaymentService extends MiPayService implements AuthenticationInterface, TransactionServiceInterface
@@ -28,10 +29,16 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
                 );
             }
 
-            return (new CreateTokenResponse())
+            if ($request['returnUrl']) {
+                return (new CreateOneOffPaymentResponse())
                 ->setId($response->json('ID'))
                 ->setPaymentUrl($response->json('paymentURL'))
-                ->setOriginalResponse($response->json());
+                ->setResponse($response->json('response'));
+            }
+
+            return (new CreateTokenizedPaymentResponse())
+                ->setId($response->json('ID'))
+                ->setResponse($response->json('response'));
         }
 
         throw $response->throw()->json();
