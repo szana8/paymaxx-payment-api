@@ -14,7 +14,7 @@ abstract class BasePresentationObject implements Arrayable, Jsonable, JsonSerial
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return get_object_vars($this);
     }
@@ -27,7 +27,7 @@ abstract class BasePresentationObject implements Arrayable, Jsonable, JsonSerial
      *
      * @throws JsonEncodingException
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         $json = json_encode($this->jsonSerialize(), $options);
         if (JSON_ERROR_NONE !== json_last_error()) {
@@ -42,7 +42,7 @@ abstract class BasePresentationObject implements Arrayable, Jsonable, JsonSerial
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

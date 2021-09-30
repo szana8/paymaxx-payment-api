@@ -10,7 +10,6 @@ class PaymentTokenServiceManager extends Manager
 {
     /**
      * Have to have a valid driver. Can't use just a default one.
-     * @return null
      */
     public function getDefaultDriver()
     {
@@ -20,8 +19,6 @@ class PaymentTokenServiceManager extends Manager
     /**
      * Driver for PayPal token actions, like create fetch
      * cancel, etc.
-     *
-     * @return PayPalTokenService
      */
     public function createPaypalDriver(): PayPalTokenService
     {
@@ -30,8 +27,6 @@ class PaymentTokenServiceManager extends Manager
 
     /**
      * Driver for MiPay token provider specific actions.
-     *
-     * @return MiPayTokenService
      */
     public function createMipayDriver(): MiPayTokenService
     {
