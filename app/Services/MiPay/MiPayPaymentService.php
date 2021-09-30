@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayPaymentService extends MiPayService implements AuthenticationInterface, TransactionServiceInterface
 {
-    public function create(PaymentPresenter $paymentPresenter)
+    public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
     {
         $token = $this->authenticate();
 
@@ -30,6 +30,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
                 );
             }
 
+            // TODO merge these responses to one.
             if ($request['returnUrl']) {
                 return (new CreateOneOffPaymentResponse())
                 ->setId($response->json('ID'))
@@ -45,7 +46,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         throw $response->throw()->json();
     }
 
-    public function fetch(string $external_id)
+    public function fetch(string $external_id): FetchPaymentResponse
     {
         $token = $this->authenticate();
 

@@ -30,6 +30,11 @@ abstract class MiPayService
     public const TTL = 3500;
 
     /**
+     * Success codes for the MiPay response.
+     */
+    public const SUCCESS_CODES = ['0', '00'];
+
+    /**
      * @throws AuthenticationException
      */
     public function authenticate(): string

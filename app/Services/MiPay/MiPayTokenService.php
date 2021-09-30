@@ -17,26 +17,42 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class MiPayTokenService extends MiPayService implements TokenServiceInterface, AuthenticationInterface
 {
     /**
+     * Implementation of the token creation logic.
+     *
      * @throws AuthenticationException
      * @throws RequestException
      */
     public function create(TokenPresenter $tokenPresenter): CreateTokenResponse
     {
+        // Provider authentication id needed and get the token for
+        // the further requests.
         $token = $this->authenticate();
+
+        // Make the MiPay specific request array
         $request = (new CreateTokenTransformer($tokenPresenter))->transform();
+
+        // Call the MiPay for the token creation with the endpoint
+        // in the providers' configuration.
         $response = Http::withToken($token)
             ->post(config('providers.mipay.create_token_url'), $request);
 
+        // If the provider fails for some reason throw the exception
+        // to the gateway api.
         if ($response->failed()) {
             throw $response->throw()->json();
         }
 
-        if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
+        // If it not fails it can be happened the transaction
+        // not created on MiPay side. In this section handle
+        // the MiPay specific errors.
+        if (! in_array($response->json('response')['ResponseCode'], self::SUCCESS_CODES)) {
             throw new BadRequestHttpException(
                 $response->json('response')['Description'].$response->json('response')['ErrorFields']
             );
         }
 
+        // Else create a non provider specific standard response
+        // for the gateway api.
         return (new CreateTokenResponse())
             ->setId($response->json('ID'))
             ->setPaymentUrl($response->json('paymentURL'))
@@ -44,28 +60,39 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     }
 
     /**
-     * @param $paymentToken
-     * @return FetchTokenResponse
+     * Implementation of the fetch token logic.
+     *
      * @throws AuthenticationException
      * @throws RequestException
      */
     public function fetch($paymentToken): FetchTokenResponse
     {
+        // Provider authentication id needed and get the token for
+        // the further requests.
         $token = $this->authenticate();
 
+        // Call the MiPay for the fetch token with the endpoint
+        // in the providers' configuration.
         $response = Http::withToken($token)
             ->get(config('providers.mipay.fetch_details').'/'.$paymentToken);
 
+        // If the provider fails for some reason throw the exception
+        // to the gateway api.
         if ($response->failed()) {
             throw $response->throw()->json();
         }
 
-        if (! in_array($response->json('responseCode'), ['0', '00'])) {
+        // If it not fails it can be happened the transaction
+        // not created on MiPay side. In this section handle
+        // the MiPay specific errors.
+        if (! in_array($response->json('responseCode'), self::SUCCESS_CODES)) {
             throw new BadRequestHttpException(
-                'Error during the fetch:'.$response->json('description')
+                'Error during the fetch: '.$response->json('description')
             );
         }
 
+        // Else create a non provider specific standard response
+        // for the gateway api.
         return (new FetchTokenResponse())
             ->setId($response->json('id'))
             ->setStatus($response->json('status'))
@@ -75,13 +102,12 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     }
 
     /**
-     * @param string $paymentToken
-     * @return CancelTokenResponse
+     * Implementation of the token cancellation logic.
      */
     public function cancel(string $paymentToken): CancelTokenResponse
     {
         return (new CancelTokenResponse())
             ->setStatus('successful')
-            ->setOriginalResponse(['test' => 'serezsd a testem']);
+            ->setOriginalResponse([]);
     }
 }
