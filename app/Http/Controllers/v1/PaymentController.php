@@ -41,11 +41,16 @@ class PaymentController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(Request $request, string $external_id): JsonResponse
     {
-        //
+        $response = $this->paymentServiceManager
+            ->driver(Str::lower($request->get('provider')))
+            ->withCredentials($request->get('credentials'))
+            ->fetch($external_id);
+
+        return response()->json($response);
     }
 
     /**

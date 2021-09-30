@@ -4,36 +4,19 @@ namespace App\Presentations\Response;
 
 use App\Presentations\BasePresentationObject;
 
-class FetchTokenResponse extends BasePresentationObject
+class FetchPaymentResponse extends BasePresentationObject
 {
     protected string $id;
 
-    protected string $status;
+    protected string $method;
 
-    protected string $externalId;
+    protected string $responseCode;
+
+    protected string $status;
 
     protected array $originalResponse;
 
     protected array $details;
-
-    /**
-     * @return string
-     */
-    public function getExternalId(): string
-    {
-        return $this->externalId;
-    }
-
-    /**
-     * @param string $externalId
-     * @return FetchTokenResponse
-     */
-    public function setExternalId(string $externalId): self
-    {
-        $this->externalId = $externalId;
-
-        return $this;
-    }
 
     /**
      * @return string
@@ -45,10 +28,49 @@ class FetchTokenResponse extends BasePresentationObject
 
     /**
      * @param string $id
+     * @return FetchPaymentResponse
      */
     public function setId(string $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param string $method
+     * @return FetchPaymentResponse
+     */
+    public function setMethod(string $method): self
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResponseCode(): string
+    {
+        return $this->responseCode;
+    }
+
+    /**
+     * @param string $responseCode
+     * @return FetchPaymentResponse
+     */
+    public function setResponseCode(string $responseCode): self
+    {
+        $this->responseCode = $responseCode;
 
         return $this;
     }
@@ -63,6 +85,7 @@ class FetchTokenResponse extends BasePresentationObject
 
     /**
      * @param string $status
+     * @return FetchPaymentResponse
      */
     public function setStatus(string $status): self
     {
@@ -81,6 +104,7 @@ class FetchTokenResponse extends BasePresentationObject
 
     /**
      * @param array $originalResponse
+     * @return FetchPaymentResponse
      */
     public function setOriginalResponse(array $originalResponse): self
     {
@@ -99,6 +123,7 @@ class FetchTokenResponse extends BasePresentationObject
 
     /**
      * @param array $details
+     * @return FetchPaymentResponse
      */
     public function setDetails(array $details): self
     {

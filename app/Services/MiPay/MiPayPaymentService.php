@@ -5,6 +5,7 @@ namespace App\Services\MiPay;
 use Illuminate\Support\Facades\Http;
 use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Response\FetchPaymentResponse;
 use App\Transformers\MiPay\CreatePaymentTransformer;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
@@ -33,7 +34,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
                 return (new CreateOneOffPaymentResponse())
                 ->setId($response->json('ID'))
                 ->setPaymentUrl($response->json('paymentURL'))
-                ->setResponse($response->json('response'));
+                ->setOriginalResponse($response->json('response'));
             }
 
             return (new CreateTokenizedPaymentResponse())
@@ -44,9 +45,28 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         throw $response->throw()->json();
     }
 
-    public function fetch()
+    public function fetch(string $external_id)
     {
-        // TODO: Implement fetch() method.
+        $token = $this->authenticate();
+
+        $response = Http::withToken($token)
+            ->get(config('providers.mipay.fetch_details').'/'.$external_id);
+
+        if ($response->failed()) {
+            throw $response->throw()->json();
+        }
+
+        if (! in_array($response->json('responseCode'), ['0', '00'])) {
+            throw new BadRequestHttpException(
+                'Error during the fetch:'.$response->json('description')
+            );
+        }
+
+        return (new FetchPaymentResponse())
+            ->setId($response->json('id'))
+            ->setStatus($response->json('status'))
+            ->setOriginalResponse($response->json())
+            ->setDetails($response->json('details'));
     }
 
     public function cancel()

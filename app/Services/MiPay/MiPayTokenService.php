@@ -52,6 +52,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
     public function fetch($paymentToken): FetchTokenResponse
     {
         $token = $this->authenticate();
+
         $response = Http::withToken($token)
             ->get(config('providers.mipay.fetch_details').'/'.$paymentToken);
 

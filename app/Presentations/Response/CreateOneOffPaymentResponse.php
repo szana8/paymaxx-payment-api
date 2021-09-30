@@ -10,7 +10,7 @@ class CreateOneOffPaymentResponse extends BasePresentationObject
 
     protected string $paymentUrl;
 
-    protected array $response;
+    protected array $originalResponse;
 
     /**
      * @return string
@@ -53,18 +53,18 @@ class CreateOneOffPaymentResponse extends BasePresentationObject
     /**
      * @return array
      */
-    public function getResponse(): array
+    public function getOriginalResponse(): array
     {
-        return $this->response;
+        return $this->originalResponse;
     }
 
     /**
-     * @param array $response
+     * @param array $originalResponse
      * @return CreateOneOffPaymentResponse
      */
-    public function setResponse(array $response): self
+    public function setOriginalResponse(array $originalResponse): self
     {
-        $this->response = $response;
+        $this->originalResponse = $originalResponse;
 
         return $this;
     }

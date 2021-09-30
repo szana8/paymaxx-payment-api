@@ -8,7 +8,7 @@ interface TransactionServiceInterface
 {
     public function create(PaymentPresenter $paymentPresenter);
 
-    public function fetch();
+    public function fetch(string $external_id);
 
     public function cancel();
 }
