@@ -10,6 +10,8 @@ class CreateOneOffPaymentResponse extends BasePresentationObject
 
     protected string $paymentUrl;
 
+    protected string $externalId;
+
     protected array $originalResponse;
 
     /**
@@ -65,6 +67,25 @@ class CreateOneOffPaymentResponse extends BasePresentationObject
     public function setOriginalResponse(array $originalResponse): self
     {
         $this->originalResponse = $originalResponse;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalId(): string
+    {
+        return $this->externalId;
+    }
+
+    /**
+     * @param string $externalId
+     * @return CreateOneOffPaymentResponse
+     */
+    public function setExternalId(string $externalId): self
+    {
+        $this->externalId = $externalId;
 
         return $this;
     }

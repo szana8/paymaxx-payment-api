@@ -14,7 +14,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayPaymentService extends MiPayService implements AuthenticationInterface, TransactionServiceInterface
 {
-    public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
+    /**
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Auth\AuthenticationException
+     */
+    public function create(PaymentPresenter $paymentPresenter)
     {
         $token = $this->authenticate();
 
@@ -31,16 +35,19 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
             }
 
             // TODO merge these responses to one.
-            if ($request['returnUrl']) {
+            if (isset($request['returnUrl'])) {
                 return (new CreateOneOffPaymentResponse())
-                ->setId($response->json('ID'))
-                ->setPaymentUrl($response->json('paymentURL'))
-                ->setOriginalResponse($response->json('response'));
+                    ->setId($paymentPresenter->getId())
+                    ->setExternalId($response->json('ID'))
+                    ->setPaymentUrl($response->json('paymentURL'))
+                    ->setOriginalResponse($response->json());
             }
 
             return (new CreateTokenizedPaymentResponse())
-                ->setId($response->json('ID'))
-                ->setResponse($response->json('response'));
+                ->setId($paymentPresenter->getId())
+                ->setExternalId($response->json('ID'))
+                ->setStatus($response->json('response')['Description'] === 'Approved' ? 'success' : 'failed')
+                ->setOriginalResponse($response->json());
         }
 
         throw $response->throw()->json();

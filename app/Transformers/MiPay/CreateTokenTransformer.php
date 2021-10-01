@@ -17,6 +17,9 @@ class CreateTokenTransformer
 
     public function transform(): array
     {
+        $this->tokenPresenter->getPayer()->setStatus('registration');
+        $this->tokenPresenter->getPayer()->setChannel('app');
+
         return [
             'id' => $this->tokenPresenter->getId(),
             'paymentMethod' => 'CC',

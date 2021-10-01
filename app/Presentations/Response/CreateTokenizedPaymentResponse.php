@@ -8,9 +8,11 @@ class CreateTokenizedPaymentResponse extends BasePresentationObject
 {
     protected string $id;
 
-    protected string $payment;
+    protected string $externalId;
 
-    protected array $response;
+    protected string $status;
+
+    protected array $originalResponse;
 
     /**
      * @return string
@@ -34,18 +36,18 @@ class CreateTokenizedPaymentResponse extends BasePresentationObject
     /**
      * @return string
      */
-    public function getPayment(): string
+    public function getExternalId(): string
     {
-        return $this->payment;
+        return $this->externalId;
     }
 
     /**
-     * @param string $payment
+     * @param string $externalId
      * @return CreateTokenizedPaymentResponse
      */
-    public function setPayment(string $payment): self
+    public function setExternalId(string $externalId): self
     {
-        $this->payment = $payment;
+        $this->externalId = $externalId;
 
         return $this;
     }
@@ -53,18 +55,37 @@ class CreateTokenizedPaymentResponse extends BasePresentationObject
     /**
      * @return array
      */
-    public function getResponse(): array
+    public function getOriginalResponse(): array
     {
-        return $this->response;
+        return $this->originalResponse;
     }
 
     /**
-     * @param array $response
+     * @param array $originalResponse
      * @return CreateTokenizedPaymentResponse
      */
-    public function setResponse(array $response): self
+    public function setOriginalResponse(array $originalResponse): self
     {
-        $this->response = $response;
+        $this->originalResponse = $originalResponse;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return CreateTokenizedPaymentResponse
+     */
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

@@ -15,6 +15,8 @@ class CreatePaymentTransformer
 
     public function transform(): array
     {
+        $this->paymentPresenter->getPayer()->setChannel('auto');
+
         $data = [
             'id' => $this->paymentPresenter->getId(),
             'paymentMethod' => 'CC',
@@ -48,6 +50,7 @@ class CreatePaymentTransformer
 
         if ($this->paymentPresenter->getReturnUrl()) {
             $data = array_merge($data, ['returnUrl' => $this->paymentPresenter->getReturnUrl()]);
+            $data['customer']['channel'] = 'app';
         }
 
         return $data;
