@@ -22,13 +22,9 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
      */
     public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
     {
-        $start = microtime(true);
-
         $token = $this->authenticate();
 
         $request = (new CreatePaymentTransformer($paymentPresenter))->transform();
-
-        $start = microtime(true);
 
         $response = Http::withToken($token)
             ->post(config('providers.mipay.start_payment'), $request);
