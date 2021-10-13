@@ -3,6 +3,8 @@
 namespace App\Services\MiPay;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Client\RequestException;
 use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
@@ -15,14 +17,18 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class MiPayPaymentService extends MiPayService implements AuthenticationInterface, TransactionServiceInterface
 {
     /**
-     * @throws \Illuminate\Http\Client\RequestException
-     * @throws \Illuminate\Auth\AuthenticationException
+     * @throws RequestException
+     * @throws AuthenticationException
      */
-    public function create(PaymentPresenter $paymentPresenter)
+    public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
     {
+        $start = microtime(true);
+
         $token = $this->authenticate();
 
         $request = (new CreatePaymentTransformer($paymentPresenter))->transform();
+
+        $start = microtime(true);
 
         $response = Http::withToken($token)
             ->post(config('providers.mipay.start_payment'), $request);
@@ -34,7 +40,6 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
                 );
             }
 
-            // TODO merge these responses to one.
             if (isset($request['returnUrl'])) {
                 return (new CreateOneOffPaymentResponse())
                     ->setId($paymentPresenter->getId())
@@ -53,6 +58,10 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         throw $response->throw()->json();
     }
 
+    /**
+     * @throws RequestException
+     * @throws AuthenticationException
+     */
     public function fetch(string $external_id): FetchPaymentResponse
     {
         $token = $this->authenticate();

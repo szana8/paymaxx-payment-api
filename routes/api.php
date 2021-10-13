@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware([])->group(function () {
-    Route::resource('tokens', \App\Http\Controllers\v1\PaymentTokenController::class);
+    Route::apiResource('tokens', \App\Http\Controllers\v1\PaymentTokenController::class);
 
-    Route::resource('payments', \App\Http\Controllers\v1\PaymentController::class);
+    Route::apiResource('payments', \App\Http\Controllers\v1\PaymentController::class);
 });
