@@ -32,7 +32,7 @@ class PaymentPresenter extends BasePresentationObject
     {
         $this->id = $data['id'];
         $this->paymentMethod = $data['paymentMethod'];
-        $this->paymentToken = $data['paymentToken'];
+        $this->paymentToken = $data['paymentToken'] ?? null;
         $this->returnUrl = $data['returnUrl'] ?? null;
         $this->webhookUrl = $data['webhookUrl'] ?? null;
 

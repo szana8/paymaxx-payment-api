@@ -98,4 +98,67 @@ return [
         'reversal_payment' => env('MIPAY_URL', null).'/ReversalPayment',
     ],
 
+    'paydirekt' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | MiPay provider URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used to call the MiPay provider services. This is a base
+        | URL, so you need to specify what service you want to call.
+        */
+        'url' => env('PAYDIREKT_URL', null),
+
+        /*
+        |--------------------------------------------------------------------------
+        | MiPay Redis key
+        |--------------------------------------------------------------------------
+        |
+        | To store the authentication token use this redis key with the
+        | name of the merchant or any other unique merchant related
+        | data.
+        */
+        'redis_key' => 'paydirekt_%s_access_token',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sign in to MiPay URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used for MiPay authentication. Use client id and secret
+        | to login to the provider. If the login is success it returns with
+        | a valid access token for the future calls and an expiry date.
+        */
+        'get_access_token' => env('PAYDIREKT_URL', null).'/merchantintegration/v1/token/obtain',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch payment and token details URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to create or get a checkout from Paydirekt
+        */
+        'checkout' => env('PAYDIREKT_URL', null).'/checkout/v1/checkouts',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Start payment URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to capture a checkout or get a capture details
+        */
+        'capture' => env('PAYDIREKT_URL', null).'/checkout/v1/checkouts/%s/captures',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Reversal payment URL
+        |--------------------------------------------------------------------------
+        |
+        | You can start revert your payment if it has successes in
+        | a specific time window.
+        */
+        'reversal_payment' => env('PAYDIREKT_URL', null).'/ReversalPayment',
+    ],
+
 ];
