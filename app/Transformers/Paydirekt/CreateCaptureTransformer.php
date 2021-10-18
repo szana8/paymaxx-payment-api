@@ -2,13 +2,13 @@
 
 namespace App\Transformers\Paydirekt;
 
-use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Request\PaymentCapturePresenter;
 
 class CreateCaptureTransformer
 {
-    protected PaymentPresenter $paymentPresenter;
+    protected PaymentCapturePresenter $paymentPresenter;
 
-    public function __construct(PaymentPresenter $paymentPresenter)
+    public function __construct(PaymentCapturePresenter $paymentPresenter)
     {
         $this->paymentPresenter = $paymentPresenter;
     }

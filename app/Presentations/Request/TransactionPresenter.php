@@ -6,11 +6,11 @@ class TransactionPresenter
 {
     protected string $reference;
 
-    protected string $description;
+    protected string|null $description;
 
     protected int $amount;
 
-    protected string $currency;
+    protected string|null $currency;
 
     protected array $lines;
 
@@ -21,7 +21,7 @@ class TransactionPresenter
      * @param string $currency
      * @param array $lines
      */
-    public function __construct(string $reference, string $description, int $amount, string $currency, array $lines)
+    public function __construct(string $reference, string|null $description, int $amount, string|null $currency, array $lines)
     {
         $this->reference = $reference;
         $this->description = $description;

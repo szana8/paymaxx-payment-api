@@ -2,6 +2,7 @@
 
 namespace App\Services\Paydirekt;
 
+use App\Presentations\Request\PaymentCapturePresenter;
 use App\Presentations\Response\CapturePaymentResponse;
 use App\Transformers\Paydirekt\CreateCaptureTransformer;
 use App\Transformers\Paydirekt\CreateCheckoutTransformer;
@@ -127,14 +128,14 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
      * @throws RequestException
      * @throws AuthenticationException
      */
-    public function capture(PaymentPresenter $paymentPresenter): CapturePaymentResponse
+    public function capture(PaymentCapturePresenter $paymentPresenter): CapturePaymentResponse
     {
         $token = $this->authenticate();
 
         $request = (new CreateCaptureTransformer($paymentPresenter))->transform();
 
         $response = Http::withToken($token)
-            ->post(sprintf(config('providers.paydirekt.capture'), $paymentPresenter->getId()), $request);
+            ->post(sprintf(config('providers.paydirekt.capture'), $paymentPresenter->getExternalId()), $request);
 
         if ($response->failed()) {
             throw $response->throw()->json();
@@ -142,7 +143,7 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
 
         return (new CapturePaymentResponse())
             ->setId($paymentPresenter->getId())
-            ->setExternalId($response->json('checkoutId'))
+            ->setExternalId($response->json('transactionId'))
             ->setOriginalResponse($response->json());
     }
 
