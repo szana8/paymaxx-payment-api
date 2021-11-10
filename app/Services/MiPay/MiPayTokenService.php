@@ -8,10 +8,10 @@ use Illuminate\Http\Client\RequestException;
 use App\Presentations\Request\TokenPresenter;
 use App\Services\Contracts\TokenServiceInterface;
 use App\Presentations\Response\FetchTokenResponse;
-use App\Transformers\MiPay\CreateTokenTransformer;
 use App\Presentations\Response\CancelTokenResponse;
 use App\Presentations\Response\CreateTokenResponse;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Transformers\MiPay\CreateTokenRequestTransformer;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MiPayTokenService extends MiPayService implements TokenServiceInterface, AuthenticationInterface
@@ -29,7 +29,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
         $token = $this->authenticate();
 
         // Make the MiPay specific request array
-        $request = (new CreateTokenTransformer($tokenPresenter))->transform();
+        $request = (new CreateTokenRequestTransformer($tokenPresenter))->transform();
 
         // Call the MiPay for the token creation with the endpoint
         // in the providers' configuration.

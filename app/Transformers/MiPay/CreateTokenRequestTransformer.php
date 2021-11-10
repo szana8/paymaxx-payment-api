@@ -4,7 +4,7 @@ namespace App\Transformers\MiPay;
 
 use App\Presentations\Request\TokenPresenter;
 
-class CreateTokenTransformer
+class CreateTokenRequestTransformer
 {
     protected TokenPresenter $tokenPresenter;
 

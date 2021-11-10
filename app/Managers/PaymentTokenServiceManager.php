@@ -5,6 +5,7 @@ namespace App\Managers;
 use Illuminate\Support\Manager;
 use App\Services\MiPay\MiPayTokenService;
 use App\Services\PayPal\PayPalTokenService;
+use App\Services\Twikey\TwikeyTokenService;
 
 class PaymentTokenServiceManager extends Manager
 {
@@ -31,5 +32,13 @@ class PaymentTokenServiceManager extends Manager
     public function createMipayDriver(): MiPayTokenService
     {
         return new MiPayTokenService();
+    }
+
+    /**
+     * Driver for Twikey token provider specific actions.
+     */
+    public function createTwikeyDriver(): TwikeyTokenService
+    {
+        return new TwikeyTokenService();
     }
 }

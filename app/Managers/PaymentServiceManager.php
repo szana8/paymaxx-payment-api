@@ -2,9 +2,9 @@
 
 namespace App\Managers;
 
-use App\Services\Paydirekt\PaydirektPaymentService;
 use Illuminate\Support\Manager;
 use App\Services\MiPay\MiPayPaymentService;
+use App\Services\Paydirekt\PaydirektPaymentService;
 
 class PaymentServiceManager extends Manager
 {

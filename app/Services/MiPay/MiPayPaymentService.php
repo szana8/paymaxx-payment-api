@@ -8,9 +8,9 @@ use Illuminate\Http\Client\RequestException;
 use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
-use App\Transformers\MiPay\CreatePaymentTransformer;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
+use App\Transformers\MiPay\CreatePaymentRequestTransformer;
 use App\Presentations\Response\CreateTokenizedPaymentResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -24,7 +24,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
     {
         $token = $this->authenticate();
 
-        $request = (new CreatePaymentTransformer($paymentPresenter))->transform();
+        $request = (new CreatePaymentRequestTransformer($paymentPresenter))->transform();
 
         $response = Http::withToken($token)
             ->post(config('providers.mipay.start_payment'), $request);
