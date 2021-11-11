@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\v1;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Managers\PaymentServiceManager;
-use App\Presentations\Request\PaymentPresenter;
 use App\Presentations\Request\PaymentCapturePresenter;
+use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Request\PaymentRefundPresenter;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -41,7 +42,7 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      */
     public function show(Request $request, string $external_id): JsonResponse
@@ -58,7 +59,7 @@ class PaymentController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param int     $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -69,7 +70,7 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -89,6 +90,22 @@ class PaymentController extends Controller
             ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
             ->capture(new PaymentCapturePresenter($request->get('data')));
+
+        return response()->json($response);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function refund(Request $request)
+    {
+        $response = $this->paymentServiceManager
+            ->driver(Str::lower($request->get('provider')))
+            ->withCredentials($request->get('credentials'))
+            ->refund(new PaymentRefundPresenter($request->get('data')));
 
         return response()->json($response);
     }

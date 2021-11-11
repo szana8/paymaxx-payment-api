@@ -112,7 +112,6 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
             ->post(config('providers.paydirekt.checkout'), $request);
 
         if ($response->failed()) {
-            Log::error('kagás: ', $response->json());
             throw $response->throw()->json();
         }
 
@@ -159,7 +158,6 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
             ->get(config('providers.paydirekt.checkout').'/'.$external_id);
 
         if ($response->failed()) {
-            Log::error('Response failed: ', $response->json());
             throw $response->throw()->json();
         }
 

@@ -102,17 +102,17 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | MiPay provider URL
+        | Paydirekt provider URL
         |--------------------------------------------------------------------------
         |
-        | This URL is used to call the MiPay provider services. This is a base
+        | This URL is used to call the Paydirekt provider services. This is a base
         | URL, so you need to specify what service you want to call.
         */
         'url' => env('PAYDIREKT_URL', null),
 
         /*
         |--------------------------------------------------------------------------
-        | MiPay Redis key
+        | Paydirekt Redis key
         |--------------------------------------------------------------------------
         |
         | To store the authentication token use this redis key with the
@@ -123,10 +123,10 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Sign in to MiPay URL
+        | Sign in to Paydirekt URL
         |--------------------------------------------------------------------------
         |
-        | This URL is used for MiPay authentication. Use client id and secret
+        | This URL is used for Paydirekt authentication. Use client id and secret
         | to login to the provider. If the login is success it returns with
         | a valid access token for the future calls and an expiry date.
         */
@@ -159,6 +159,28 @@ return [
         | a specific time window.
         */
         'reversal_payment' => env('PAYDIREKT_URL', null).'/ReversalPayment',
+    ],
+
+    'tikkie' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Tikkie provider URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used to call the Tikkie provider services. This is a base
+        | URL, so you need to specify what service you want to call.
+        */
+        'url' => env('TIKKIE_URL', null),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Start payment URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to capture a checkout or get a capture details
+        */
+        'refund' => env('TIKKIE_URL', null).'/%s/payments/%s/refunds',
     ],
 
     'twikey' => [
