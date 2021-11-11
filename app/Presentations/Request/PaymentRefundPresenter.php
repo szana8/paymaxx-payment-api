@@ -15,6 +15,7 @@ class PaymentRefundPresenter extends BasePresentationObject
      * Registered payment token string.
      */
     protected string|null $paymentToken;
+
     protected string|null $externalId;
 
     protected TransactionPresenter $transaction;

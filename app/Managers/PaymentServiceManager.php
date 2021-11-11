@@ -2,11 +2,11 @@
 
 namespace App\Managers;
 
+use Illuminate\Support\Manager;
 use App\Services\MiPay\MiPayPaymentService;
-use App\Services\Paydirekt\PaydirektPaymentService;
 use App\Services\Tikkie\TikkiePaymentService;
 use App\Services\Twikey\TwikeyPaymentService;
-use Illuminate\Support\Manager;
+use App\Services\Paydirekt\PaydirektPaymentService;
 
 class PaymentServiceManager extends Manager
 {

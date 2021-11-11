@@ -2,19 +2,19 @@
 
 namespace App\Services\Tikkie;
 
-use App\Presentations\Request\PaymentPresenter;
-use App\Presentations\Request\PaymentRefundPresenter;
-use App\Presentations\Response\CapturePaymentResponse;
-use App\Presentations\Response\CreateOneOffPaymentResponse;
-use App\Presentations\Response\FetchPaymentResponse;
-use App\Services\Contracts\AuthenticationInterface;
-use App\Services\Contracts\TransactionServiceInterface;
-use App\Transformers\Tikkie\CreateCheckoutTransformer;
-use App\Transformers\Tikkie\CreateRefundTransformer;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Presentations\Request\PaymentPresenter;
+use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Response\FetchPaymentResponse;
+use App\Transformers\Tikkie\CreateRefundTransformer;
+use App\Presentations\Request\PaymentRefundPresenter;
+use App\Presentations\Response\CapturePaymentResponse;
+use App\Transformers\Tikkie\CreateCheckoutTransformer;
+use App\Services\Contracts\TransactionServiceInterface;
+use App\Presentations\Response\CreateOneOffPaymentResponse;
 
 class TikkiePaymentService implements AuthenticationInterface, TransactionServiceInterface
 {
@@ -24,7 +24,9 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
     public const TTL = 3500;
 
     protected string $apiKey;
+
     protected string $xAppToken;
+
     /**
      * Merchant name for the redis key generation.
      */
@@ -77,23 +79,26 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
      * @throws RequestException
      * @throws AuthenticationException
      */
-    public function refund(PaymentRefundPresenter $paymentPresenter): CapturePaymentResponse
+    public function refund(PaymentRefundPresenter $paymentRefundPresenter): CapturePaymentResponse
     {
         $token = $this->authenticate();
         $headers = [
             'X-App-Token' => $token,
             'API-Key' => $this->apiKey,
         ];
-        $request = (new CreateRefundTransformer($paymentPresenter))->transform();
+        $request = (new CreateRefundTransformer($paymentRefundPresenter))->transform();
         $response = Http::withHeaders($headers)
-            ->post(sprintf(config('providers.tikkie.refund'), $paymentPresenter->getExternalId(),
-                $paymentPresenter->getId()), $request);
+            ->post(sprintf(
+                config('providers.tikkie.refund'),
+                $paymentRefundPresenter->getExternalId(),
+                $paymentRefundPresenter->getId()
+            ), $request);
         if ($response->failed()) {
             throw $response->throw()->json();
         }
 
         return (new CapturePaymentResponse())
-            ->setId($paymentPresenter->getId())
+            ->setId($paymentRefundPresenter->getId())
             ->setExternalId($response->json('transactionId'))
             ->setOriginalResponse($response->json());
     }
@@ -105,9 +110,9 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
     public function fetch(string $external_id): FetchPaymentResponse
     {
         $token = $this->authenticate();
-        Log::info('url: ', [config('providers.tikkie.url') . '/' . $external_id]);
+        Log::info('url: ', [config('providers.tikkie.url').'/'.$external_id]);
         $response = Http::withToken($token)
-            ->get(config('providers.tikkie.url') . '/' . $external_id);
+            ->get(config('providers.tikkie.url').'/'.$external_id);
         if ($response->failed()) {
             throw $response->throw()->json();
         }

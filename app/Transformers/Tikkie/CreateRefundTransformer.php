@@ -2,9 +2,7 @@
 
 namespace App\Transformers\Tikkie;
 
-use App\Presentations\Request\PaymentPresenter;
 use App\Presentations\Request\PaymentRefundPresenter;
-use Illuminate\Support\Carbon;
 
 class CreateRefundTransformer
 {

@@ -2,8 +2,8 @@
 
 namespace App\Transformers\Tikkie;
 
-use App\Presentations\Request\PaymentPresenter;
 use Illuminate\Support\Carbon;
+use App\Presentations\Request\PaymentPresenter;
 
 class CreateCheckoutTransformer
 {

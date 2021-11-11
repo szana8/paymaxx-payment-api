@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\v1;
 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Managers\PaymentServiceManager;
-use App\Presentations\Request\PaymentCapturePresenter;
 use App\Presentations\Request\PaymentPresenter;
 use App\Presentations\Request\PaymentRefundPresenter;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Presentations\Request\PaymentCapturePresenter;
 
 class PaymentController extends Controller
 {
