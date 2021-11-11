@@ -2,25 +2,22 @@
 
 namespace App\Services\Paydirekt;
 
-use App\Presentations\Request\PaymentCapturePresenter;
-use App\Presentations\Response\CapturePaymentResponse;
-use App\Transformers\Paydirekt\CreateCaptureTransformer;
-use App\Transformers\Paydirekt\CreateCheckoutTransformer;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
 use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
-use App\Transformers\Paydirekt\CreatePaymentTransformer;
+use App\Presentations\Request\PaymentCapturePresenter;
+use App\Presentations\Response\CapturePaymentResponse;
 use App\Services\Contracts\TransactionServiceInterface;
+use App\Transformers\Paydirekt\CreateCaptureTransformer;
+use App\Transformers\Paydirekt\CreateCheckoutTransformer;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
-use App\Presentations\Response\CreateTokenizedPaymentResponse;
-use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PaydirektPaymentService implements AuthenticationInterface, TransactionServiceInterface
 {
@@ -30,7 +27,9 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
     public const TTL = 3500;
 
     protected string $apiKey;
+
     protected string $apiSecret;
+
     /**
      * Merchant name for the redis key generation.
      */
@@ -155,12 +154,12 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
     {
         $token = $this->authenticate();
 
-        Log::info('url: ', [config('providers.paydirekt.checkout') . '/' . $external_id]);
+        Log::info('url: ', [config('providers.paydirekt.checkout').'/'.$external_id]);
         $response = Http::withToken($token)
-            ->get(config('providers.paydirekt.checkout') . '/' . $external_id);
+            ->get(config('providers.paydirekt.checkout').'/'.$external_id);
 
         if ($response->failed()) {
-            Log::error('kagás: ', $response->json());
+            Log::error('Response failed: ', $response->json());
             throw $response->throw()->json();
         }
 

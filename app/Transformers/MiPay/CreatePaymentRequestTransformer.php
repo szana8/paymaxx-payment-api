@@ -4,7 +4,7 @@ namespace App\Transformers\MiPay;
 
 use App\Presentations\Request\PaymentPresenter;
 
-class CreatePaymentTransformer
+class CreatePaymentRequestTransformer
 {
     protected PaymentPresenter $paymentPresenter;
 

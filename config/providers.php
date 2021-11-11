@@ -161,4 +161,83 @@ return [
         'reversal_payment' => env('PAYDIREKT_URL', null).'/ReversalPayment',
     ],
 
+    'twikey' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Twikey provider URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used to call the Twikey provider services. This is a base
+        | URL, so you need to specify what service you want to call.
+        */
+        'url' => env('TWIKEY_URL', null),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Twikey Redis key
+        |--------------------------------------------------------------------------
+        |
+        | To store the authentication token use this redis key with the
+        | name of the merchant or any other unique merchant related
+        | data.
+        */
+        'redis_key' => 'twikey_%s_access_token',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sign in to Twikey URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used for Twikey authentication. Use just the apiToken for
+        | the login to the provider. If the login is success it returns with
+        | a valid access token for the future calls and an expiry date.
+        */
+        'get_access_token' => env('TWIKEY_URL', null).'/creditor',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Twikey payment token URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to create token for the future payments. It needs the
+        | Authorization in the header. It returns back with a registration
+        | form URL.
+        */
+        'create_token_url' => env('TWIKEY_URL', null).'/creditor/sign',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch payment and token details URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to get the details of a Twikey token or payment. Send
+        | the Twikey ID of the token or payment, and it returns back the
+        | status and many other information of it.
+        */
+        'fetch_token_details' => env('TWIKEY_URL', null).'/creditor/mandate/detail',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch payment and token details URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to get the details of a MiPay token or payment. Send
+        | the MiPay ID of the token or payment, and it returns back the
+        | status and many other information of it.
+        */
+        'cancel_token' => env('TWIKEY_URL', null).'/creditor/mandate',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Start payment URL
+        |--------------------------------------------------------------------------
+        |
+        | You can start a one off or tokenized payment with this URL. If
+        | the payment is a one off one it will returns back with a form
+        | URL with card information form.
+        */
+        'start_payment' => env('TWIKEY_URL', null).'/creditor/transaction',
+    ],
+
 ];

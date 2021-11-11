@@ -12,7 +12,9 @@ final class Base64Url
      * <p>
      * This class provides static functions only.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Encodes data with Base64Url.
@@ -47,6 +49,6 @@ final class Base64Url
      */
     public static function isBase64UrlEncoded($string)
     {
-        return preg_match("/^[0-9a-zA-Z-_]+[=]{0,2}$/", $string) ? true : false;
+        return preg_match('/^[0-9a-zA-Z-_]+[=]{0,2}$/', $string) ? true : false;
     }
 }

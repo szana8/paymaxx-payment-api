@@ -2,6 +2,7 @@
 
 namespace App\Presentations\Request;
 
+use Illuminate\Support\Facades\Log;
 use App\Presentations\BasePresentationObject;
 
 class TokenPresenter extends BasePresentationObject
@@ -23,6 +24,8 @@ class TokenPresenter extends BasePresentationObject
 
     protected ThreeDSecurePresenter $threeDSecure;
 
+    protected SepaDirectDebitPresenter $sepaDirectDebit;
+
     public function __construct(array $data)
     {
         $this->id = $data['id'];
@@ -31,15 +34,21 @@ class TokenPresenter extends BasePresentationObject
         $this->description = $data['description'];
         $this->webhookUrl = $data['webhookUrl'];
 
-        if ($data['payer']) {
+        Log::error('sd', $data);
+
+        if (isset($data['payer'])) {
             $billingAddress = isset($data['payer']['billing']) ? new AddressPresenter($data['payer']['billing']) : null;
             $shippingAddress = isset($data['payer']['shipping']) ? new AddressPresenter($data['payer']['shipping']) : null;
 
             $this->payer = new PayerPresenter($data['payer'], $billingAddress, $shippingAddress);
         }
 
-        if ($data['3DSecure']) {
+        if (isset($data['3DSecure'])) {
             $this->threeDSecure = new ThreeDSecurePresenter($data['3DSecure']);
+        }
+
+        if (isset($data['sepa-direct-debit'])) {
+            $this->sepaDirectDebit = new SepaDirectDebitPresenter($data['sepa-direct-debit']);
         }
     }
 
@@ -97,5 +106,13 @@ class TokenPresenter extends BasePresentationObject
     public function getThreeDSecure(): ThreeDSecurePresenter
     {
         return $this->threeDSecure;
+    }
+
+    /**
+     * @return SepaDirectDebitPresenter
+     */
+    public function getSepaDirectDebit(): SepaDirectDebitPresenter
+    {
+        return $this->sepaDirectDebit;
     }
 }

@@ -19,14 +19,16 @@ use Ramsey\Uuid\Uuid;
  */
 final class Hmac
 {
-    const CRYPTO_ALGORITHM = "sha256";
+    public const CRYPTO_ALGORITHM = 'sha256';
 
     /**
      * Private constructor.
      * <p>
      * This class provides static functions only.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Generate the HMAC signature. The strong SHA-256 algorithm is used.
@@ -45,8 +47,8 @@ final class Hmac
         $stringToSign = self::stringToSign($requestId, $timestamp, $apiKey, $randomNonce);
         $apiSecretDecoded = Base64Url::decode($apiSecret);
 
-        if (!in_array(self::CRYPTO_ALGORITHM, hash_algos(), true)) {
-            throw new \RuntimeException("Could not initialize hmac. " .self::CRYPTO_ALGORITHM ." is not supported.");
+        if (! in_array(self::CRYPTO_ALGORITHM, hash_algos(), true)) {
+            throw new \RuntimeException('Could not initialize hmac. '.self::CRYPTO_ALGORITHM.' is not supported.');
         }
 
         $hash = hash_hmac(self::CRYPTO_ALGORITHM, $stringToSign, $apiSecretDecoded, true);
@@ -71,69 +73,67 @@ final class Hmac
         self::validateApiKey($apiKey);
         self::validateNonce($randomNonce);
 
-        $stringToSign = sprintf("%s:%s:%s:%s", $requestId, $timestamp, $apiKey, $randomNonce);
-
-        return $stringToSign;
+        return sprintf('%s:%s:%s:%s', $requestId, $timestamp, $apiKey, $randomNonce);
     }
 
     private static function validateNonce($randomNonce)
     {
-        if ($randomNonce === NULL || !trim($randomNonce)) {
-            throw new \InvalidArgumentException("randomNonce is not set");
+        if ($randomNonce === null || ! trim($randomNonce)) {
+            throw new \InvalidArgumentException('randomNonce is not set');
         }
         if (strlen($randomNonce) < 10) {
-            throw new \InvalidArgumentException("randomNonce is not greater or equal the minimum length (10): " .$randomNonce);
+            throw new \InvalidArgumentException('randomNonce is not greater or equal the minimum length (10): '.$randomNonce);
         }
         if (strlen($randomNonce) > 64) {
-            throw new \InvalidArgumentException("randomNonce is not less or equal the maximum length (64): " .$randomNonce);
+            throw new \InvalidArgumentException('randomNonce is not less or equal the maximum length (64): '.$randomNonce);
         }
-        if (!Base64Url::isBase64UrlEncoded($randomNonce)) {
-            throw new \InvalidArgumentException("randomNonce is not base 64 url encoded: " .$randomNonce);
+        if (! Base64Url::isBase64UrlEncoded($randomNonce)) {
+            throw new \InvalidArgumentException('randomNonce is not base 64 url encoded: '.$randomNonce);
         }
     }
 
     private static function validateApiKey($apiKey)
     {
-        if ($apiKey === NULL || !trim($apiKey)) {
-            throw new \InvalidArgumentException("apiKey is not set");
+        if ($apiKey === null || ! trim($apiKey)) {
+            throw new \InvalidArgumentException('apiKey is not set');
         }
-        if (!Uuid::isValid($apiKey)) {
-            throw new \InvalidArgumentException("apiKey is not a valid UUID: " .$apiKey);
+        if (! Uuid::isValid($apiKey)) {
+            throw new \InvalidArgumentException('apiKey is not a valid UUID: '.$apiKey);
         }
     }
 
     private static function validateApiSecret($apiSecret)
     {
-        if ($apiSecret === NULL || !trim($apiSecret)) {
-            throw new \InvalidArgumentException("apiSecret is not set");
+        if ($apiSecret === null || ! trim($apiSecret)) {
+            throw new \InvalidArgumentException('apiSecret is not set');
         }
-        if (!Base64Url::isBase64UrlEncoded($apiSecret)) {
-            throw new \InvalidArgumentException("apiSecret is not base 64 url encoded");
+        if (! Base64Url::isBase64UrlEncoded($apiSecret)) {
+            throw new \InvalidArgumentException('apiSecret is not base 64 url encoded');
         }
         if (strlen(Base64Url::decode($apiSecret)) < 32) {
-            throw new \InvalidArgumentException("apiSecret is not greater or equal the minimum length (32): " .strlen(Base64Url::decode($apiSecret)));
+            throw new \InvalidArgumentException('apiSecret is not greater or equal the minimum length (32): '.strlen(Base64Url::decode($apiSecret)));
         }
     }
 
     private static function validateRequestId($requestId)
     {
-        if ($requestId === NULL || !trim($requestId)) {
-            throw new \InvalidArgumentException("requestId is not set");
+        if ($requestId === null || ! trim($requestId)) {
+            throw new \InvalidArgumentException('requestId is not set');
         }
-        if (!Uuid::isValid($requestId)) {
-            throw new \InvalidArgumentException("requestId is not a valid UUID: " .$requestId);
+        if (! Uuid::isValid($requestId)) {
+            throw new \InvalidArgumentException('requestId is not a valid UUID: '.$requestId);
         }
     }
 
     private static function validateDateString($dateString)
     {
-        if ($dateString === NULL || !trim($dateString)) {
-            throw new \InvalidArgumentException("dateString is not set");
+        if ($dateString === null || ! trim($dateString)) {
+            throw new \InvalidArgumentException('dateString is not set');
         }
 
         $ts = \DateTime::createFromFormat('YmdHis', $dateString, new \DateTimeZone('UTC'));
         if (strlen($dateString) != 14 || ($ts && $ts->format('YmdHis') != $dateString)) {
-            throw new \InvalidArgumentException("dateString is not a valid timestamp in format yyyyMMddHHmmss: " .$dateString);
+            throw new \InvalidArgumentException('dateString is not a valid timestamp in format yyyyMMddHHmmss: '.$dateString);
         }
     }
 }
