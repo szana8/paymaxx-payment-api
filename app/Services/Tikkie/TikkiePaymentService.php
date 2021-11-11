@@ -12,11 +12,12 @@ use App\Presentations\Response\FetchPaymentResponse;
 use App\Transformers\Tikkie\CreateRefundTransformer;
 use App\Presentations\Request\PaymentRefundPresenter;
 use App\Presentations\Response\CapturePaymentResponse;
+use App\Services\Contracts\RefundableServiceInterface;
 use App\Transformers\Tikkie\CreateCheckoutTransformer;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
 
-class TikkiePaymentService implements AuthenticationInterface, TransactionServiceInterface
+class TikkiePaymentService implements AuthenticationInterface, TransactionServiceInterface, RefundableServiceInterface
 {
     /**
      * Default time to live for the redis cache.
