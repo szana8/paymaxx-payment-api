@@ -18,4 +18,5 @@ Route::middleware([])->group(function () {
 
     Route::apiResource('payments', \App\Http\Controllers\v1\PaymentController::class);
     Route::post('payments/{payment}/capture', [\App\Http\Controllers\v1\PaymentController::class, 'capture']);
+    Route::post('payments/{payment}/refund', [\App\Http\Controllers\v1\PaymentController::class, 'refund']);
 });

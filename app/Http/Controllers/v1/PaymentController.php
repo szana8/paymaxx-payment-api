@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Presentations\Request\PaymentCapturePresenter;
+use App\Presentations\Request\PaymentRefundPresenter;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -90,6 +91,22 @@ class PaymentController extends Controller
             ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
             ->capture(new PaymentCapturePresenter($request->get('data')));
+
+        return response()->json($response);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function refund(Request $request)
+    {
+        $response = $this->paymentServiceManager
+            ->driver(Str::lower($request->get('provider')))
+            ->withCredentials($request->get('credentials'))
+            ->refund(new PaymentRefundPresenter($request->get('data')));
 
         return response()->json($response);
     }
