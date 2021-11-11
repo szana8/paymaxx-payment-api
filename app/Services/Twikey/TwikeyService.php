@@ -25,12 +25,17 @@ abstract class TwikeyService
     protected string $merchant;
 
     /**
+     * Sign method for twikey.
+     */
+    protected string $signMethod;
+
+    /**
      * Default time to live for the redis cache.
      */
     public const TTL = 3500;
 
     /**
-     * @throws AuthenticationException
+     * Common authenticate function for all the methods.
      */
     public function authenticate(): string
     {
@@ -77,6 +82,7 @@ abstract class TwikeyService
         $this->apiToken = $credentials['apiToken'];
         $this->contractTemplateId = $credentials['contractTemplateId'];
         $this->merchant = $credentials['merchant'];
+        $this->signMethod = $credentials['signMethod'];
 
         return $this;
     }

@@ -20,17 +20,11 @@ class CreateTokenRequestTransformer
     public function transform(): array
     {
         return [
-            //'id' => $this->tokenPresenter->getId(),
-            //'paymentMethod' => $this->tokenPresenter->getPaymentMethod(),
-            //'returnUrl' => $this->tokenPresenter->getReturnUrl(),
-            //'description' => $this->tokenPresenter->getDescription(),
-            //'webhookUrl' => $this->tokenPresenter->getWebhookUrl(),
             'check' => false,
             'token' => $this->tokenPresenter->getId(),
             'ct' => $this->getContractTemplateId(),
             'method' => $this->getMethod(),
-            'bic' => 'INGBNL2A',
-            //'method' => $this->getMethod(),
+            'bic' => $this->tokenPresenter->getSepaDirectDebit()->getBic(),
         ];
     }
 
