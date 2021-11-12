@@ -68,14 +68,18 @@ class PaymentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param string  $external_id
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, string $external_id): JsonResponse
     {
-        //
+        $response = $this->paymentServiceManager
+            ->driver(Str::lower($request->get('provider')))
+            ->withCredentials($request->get('credentials'))
+            ->reversal($external_id);
+
+        return response()->json($response);
     }
 
     /**
