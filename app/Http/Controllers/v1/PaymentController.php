@@ -8,8 +8,6 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Managers\PaymentServiceManager;
 use App\Presentations\Request\PaymentPresenter;
-use App\Presentations\Request\PaymentRefundPresenter;
-use App\Presentations\Request\PaymentCapturePresenter;
 
 class PaymentController extends Controller
 {
@@ -78,38 +76,6 @@ class PaymentController extends Controller
             ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
             ->reversal($external_id);
-
-        return response()->json($response);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function capture(Request $request)
-    {
-        $response = $this->paymentServiceManager
-            ->driver(Str::lower($request->get('provider')))
-            ->withCredentials($request->get('credentials'))
-            ->capture(new PaymentCapturePresenter($request->get('data')));
-
-        return response()->json($response);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function refund(Request $request)
-    {
-        $response = $this->paymentServiceManager
-            ->driver(Str::lower($request->get('provider')))
-            ->withCredentials($request->get('credentials'))
-            ->refund(new PaymentRefundPresenter($request->get('data')));
 
         return response()->json($response);
     }
