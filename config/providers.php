@@ -178,7 +178,18 @@ return [
         | Start payment URL
         |--------------------------------------------------------------------------
         |
-        | Use this URL to capture a checkout or get a capture details
+        | You can start a one off or tokenized payment with this URL. If
+        | the payment is a one off one it will returns back with a form
+        | URL with card information form.
+        */
+        'start_payment' => env('TIKKIE_URL', null).'/v2/tikkie/paymentrequests',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Refund payment URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to refund a transaction amount.
         */
         'refund' => env('TIKKIE_URL', null).'/%s/payments/%s/refunds',
     ],

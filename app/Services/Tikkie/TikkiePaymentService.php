@@ -2,7 +2,6 @@
 
 namespace App\Services\Tikkie;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
@@ -72,9 +71,10 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
         ];
 
         $request = (new CreateCheckoutTransformer($paymentPresenter))->transform();
-        Log::info('req: ', $request);
+
         $response = Http::withHeaders($headers)
-            ->post(config('providers.tikkie.url'), $request);
+            ->post(config('providers.tikkie.start_payment'), $request);
+
         if ($response->failed()) {
             throw $response->throw()->json();
         }
@@ -93,9 +93,10 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
     public function fetch(string $external_id): FetchPaymentResponse
     {
         $token = $this->authenticate();
-        Log::info('url: ', [config('providers.tikkie.url').'/'.$external_id]);
+
         $response = Http::withToken($token)
             ->get(config('providers.tikkie.url').'/'.$external_id);
+
         if ($response->failed()) {
             throw $response->throw()->json();
         }
@@ -118,13 +119,16 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
             'X-App-Token' => $token,
             'API-Key' => $this->apiKey,
         ];
+
         $request = (new CreateRefundTransformer($paymentRefundPresenter))->transform();
+
         $response = Http::withHeaders($headers)
             ->post(sprintf(
                 config('providers.tikkie.refund'),
                 $paymentRefundPresenter->getExternalId(),
                 $paymentRefundPresenter->getId()
             ), $request);
+
         if ($response->failed()) {
             throw $response->throw()->json();
         }
