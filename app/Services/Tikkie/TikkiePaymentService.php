@@ -11,7 +11,7 @@ use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
 use App\Transformers\Tikkie\CreateRefundTransformer;
 use App\Presentations\Request\PaymentRefundPresenter;
-use App\Presentations\Response\CapturePaymentResponse;
+use App\Presentations\Response\RefundPaymentResponse;
 use App\Services\Contracts\RefundableServiceInterface;
 use App\Transformers\Tikkie\CreateCheckoutTransformer;
 use App\Services\Contracts\TransactionServiceInterface;
@@ -24,8 +24,14 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
      */
     public const TTL = 3500;
 
+    /**
+     * Api key for the authentication.
+     */
     protected string $apiKey;
 
+    /**
+     * Xapp token coming from Tikkie admin for the authentication.
+     */
     protected string $xAppToken;
 
     /**
@@ -33,14 +39,16 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
      */
     protected string $merchant;
 
+    /**
+     * Xapp token for the authentication.
+     */
     public function authenticate(): string
     {
         return $this->xAppToken;
     }
 
     /**
-     * @param array $credentials
-     * @return TikkiePaymentService
+     * Register the credentials for the authentication.
      */
     public function withCredentials(array $credentials): self
     {
@@ -57,10 +65,12 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
     public function create(PaymentPresenter $paymentPresenter): CreateOneOffPaymentResponse
     {
         $token = $this->authenticate();
+
         $headers = [
             'X-App-Token' => $token,
             'API-Key' => $this->apiKey,
         ];
+
         $request = (new CreateCheckoutTransformer($paymentPresenter))->transform();
         Log::info('req: ', $request);
         $response = Http::withHeaders($headers)
@@ -73,34 +83,6 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
             ->setId($paymentPresenter->getId())
             ->setExternalId($response->json('paymentRequestToken'))
             ->setPaymentUrl($response->json('url'))
-            ->setOriginalResponse($response->json());
-    }
-
-    /**
-     * @throws RequestException
-     * @throws AuthenticationException
-     */
-    public function refund(PaymentRefundPresenter $paymentRefundPresenter): CapturePaymentResponse
-    {
-        $token = $this->authenticate();
-        $headers = [
-            'X-App-Token' => $token,
-            'API-Key' => $this->apiKey,
-        ];
-        $request = (new CreateRefundTransformer($paymentRefundPresenter))->transform();
-        $response = Http::withHeaders($headers)
-            ->post(sprintf(
-                config('providers.tikkie.refund'),
-                $paymentRefundPresenter->getExternalId(),
-                $paymentRefundPresenter->getId()
-            ), $request);
-        if ($response->failed()) {
-            throw $response->throw()->json();
-        }
-
-        return (new CapturePaymentResponse())
-            ->setId($paymentRefundPresenter->getId())
-            ->setExternalId($response->json('transactionId'))
             ->setOriginalResponse($response->json());
     }
 
@@ -123,6 +105,34 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
             ->setStatus($response->json('status'))
             ->setOriginalResponse($response->json())
             ->setDetails([]);
+    }
+
+    /**
+     * @throws RequestException
+     * @throws AuthenticationException
+     */
+    public function refund(PaymentRefundPresenter $paymentRefundPresenter): RefundPaymentResponse
+    {
+        $token = $this->authenticate();
+        $headers = [
+            'X-App-Token' => $token,
+            'API-Key' => $this->apiKey,
+        ];
+        $request = (new CreateRefundTransformer($paymentRefundPresenter))->transform();
+        $response = Http::withHeaders($headers)
+            ->post(sprintf(
+                config('providers.tikkie.refund'),
+                $paymentRefundPresenter->getExternalId(),
+                $paymentRefundPresenter->getId()
+            ), $request);
+        if ($response->failed()) {
+            throw $response->throw()->json();
+        }
+
+        return (new RefundPaymentResponse())
+            ->setId($paymentRefundPresenter->getId())
+            ->setExternalId($response->json('transactionId'))
+            ->setOriginalResponse($response->json());
     }
 
     public function cancel()
