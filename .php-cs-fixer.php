@@ -12,7 +12,7 @@ $rules = [
     'braces' => true,
     'cast_spaces' => true,
     'concat_space' => [
-        'spacing' => 'none',
+        'spacing' => 'one',
     ],
     'declare_equal_normalize' => true,
     'elseif' => true,

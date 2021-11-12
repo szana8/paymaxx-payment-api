@@ -95,7 +95,7 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
         $token = $this->authenticate();
 
         $response = Http::withToken($token)
-            ->get(config('providers.tikkie.url').'/'.$external_id);
+            ->get(config('providers.tikkie.url') . '/' . $external_id);
 
         if ($response->failed()) {
             throw $response->throw()->json();

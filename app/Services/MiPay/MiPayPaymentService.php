@@ -32,7 +32,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         if ($response->ok()) {
             if (! in_array($response->json('response')['ResponseCode'], ['0', '00'])) {
                 throw new BadRequestHttpException(
-                    $response->json('response')['Description'].$response->json('response')['ErrorFields']
+                    $response->json('response')['Description'] . $response->json('response')['ErrorFields']
                 );
             }
 
@@ -63,7 +63,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
         $token = $this->authenticate();
 
         $response = Http::withToken($token)
-            ->get(config('providers.mipay.fetch_details').'/'.$external_id);
+            ->get(config('providers.mipay.fetch_details') . '/' . $external_id);
 
         if ($response->failed()) {
             throw $response->throw()->json();
@@ -71,7 +71,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
 
         if (! in_array($response->json('responseCode'), ['0', '00'])) {
             throw new BadRequestHttpException(
-                'Error during the fetch:'.$response->json('description')
+                'Error during the fetch:' . $response->json('description')
             );
         }
 

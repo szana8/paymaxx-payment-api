@@ -48,7 +48,7 @@ final class Hmac
         $apiSecretDecoded = Base64Url::decode($apiSecret);
 
         if (! in_array(self::CRYPTO_ALGORITHM, hash_algos(), true)) {
-            throw new \RuntimeException('Could not initialize hmac. '.self::CRYPTO_ALGORITHM.' is not supported.');
+            throw new \RuntimeException('Could not initialize hmac. ' . self::CRYPTO_ALGORITHM . ' is not supported.');
         }
 
         $hash = hash_hmac(self::CRYPTO_ALGORITHM, $stringToSign, $apiSecretDecoded, true);
@@ -82,13 +82,13 @@ final class Hmac
             throw new \InvalidArgumentException('randomNonce is not set');
         }
         if (strlen($randomNonce) < 10) {
-            throw new \InvalidArgumentException('randomNonce is not greater or equal the minimum length (10): '.$randomNonce);
+            throw new \InvalidArgumentException('randomNonce is not greater or equal the minimum length (10): ' . $randomNonce);
         }
         if (strlen($randomNonce) > 64) {
-            throw new \InvalidArgumentException('randomNonce is not less or equal the maximum length (64): '.$randomNonce);
+            throw new \InvalidArgumentException('randomNonce is not less or equal the maximum length (64): ' . $randomNonce);
         }
         if (! Base64Url::isBase64UrlEncoded($randomNonce)) {
-            throw new \InvalidArgumentException('randomNonce is not base 64 url encoded: '.$randomNonce);
+            throw new \InvalidArgumentException('randomNonce is not base 64 url encoded: ' . $randomNonce);
         }
     }
 
@@ -98,7 +98,7 @@ final class Hmac
             throw new \InvalidArgumentException('apiKey is not set');
         }
         if (! Uuid::isValid($apiKey)) {
-            throw new \InvalidArgumentException('apiKey is not a valid UUID: '.$apiKey);
+            throw new \InvalidArgumentException('apiKey is not a valid UUID: ' . $apiKey);
         }
     }
 
@@ -111,7 +111,7 @@ final class Hmac
             throw new \InvalidArgumentException('apiSecret is not base 64 url encoded');
         }
         if (strlen(Base64Url::decode($apiSecret)) < 32) {
-            throw new \InvalidArgumentException('apiSecret is not greater or equal the minimum length (32): '.strlen(Base64Url::decode($apiSecret)));
+            throw new \InvalidArgumentException('apiSecret is not greater or equal the minimum length (32): ' . strlen(Base64Url::decode($apiSecret)));
         }
     }
 
@@ -121,7 +121,7 @@ final class Hmac
             throw new \InvalidArgumentException('requestId is not set');
         }
         if (! Uuid::isValid($requestId)) {
-            throw new \InvalidArgumentException('requestId is not a valid UUID: '.$requestId);
+            throw new \InvalidArgumentException('requestId is not a valid UUID: ' . $requestId);
         }
     }
 
@@ -133,7 +133,7 @@ final class Hmac
 
         $ts = \DateTime::createFromFormat('YmdHis', $dateString, new \DateTimeZone('UTC'));
         if (strlen($dateString) != 14 || ($ts && $ts->format('YmdHis') != $dateString)) {
-            throw new \InvalidArgumentException('dateString is not a valid timestamp in format yyyyMMddHHmmss: '.$dateString);
+            throw new \InvalidArgumentException('dateString is not a valid timestamp in format yyyyMMddHHmmss: ' . $dateString);
         }
     }
 }

@@ -39,12 +39,12 @@ abstract class TwikeyService
      */
     public function authenticate(): string
     {
-        Log::debug('Twikey authentication for: '.$this->merchant);
+        Log::debug('Twikey authentication for: ' . $this->merchant);
 
         $cacheKey = sprintf(config('providers.twikey.redis_key'), \Str::snake($this->merchant));
 
         if (Cache::get($cacheKey)) {
-            Log::debug('Get Twikey authentication from cache: '.$cacheKey);
+            Log::debug('Get Twikey authentication from cache: ' . $cacheKey);
 
             return Cache::get($cacheKey);
         }

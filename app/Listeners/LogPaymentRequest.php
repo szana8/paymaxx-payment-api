@@ -26,7 +26,7 @@ class LogPaymentRequest
     public function handle(RequestSending $request)
     {
         Log::debug(
-            $request->request->method().' Payment Request',
+            $request->request->method() . ' Payment Request',
             [
                 'URL' => $request->request->url(),
                 'method' => $request->request->method(),

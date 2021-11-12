@@ -52,7 +52,7 @@ return [
         | to login to the provider. If the login is success it returns with
         | a valid access token for the future calls and an expiry date.
         */
-        'get_access_token' => env('MIPAY_URL', null).'/GetAccessToken',
+        'get_access_token' => env('MIPAY_URL', null) . '/GetAccessToken',
 
         /*
         |--------------------------------------------------------------------------
@@ -63,7 +63,7 @@ return [
         | auth token in the header. It returns back with a registration
         | form URL which contains the form for the card data.
         */
-        'create_token_url' => env('MIPAY_URL', null).'/CreatePaymentToken',
+        'create_token_url' => env('MIPAY_URL', null) . '/CreatePaymentToken',
 
         /*
         |--------------------------------------------------------------------------
@@ -74,7 +74,7 @@ return [
         | the MiPay ID of the token or payment, and it returns back the
         | status and many other information of it.
         */
-        'fetch_details' => env('MIPAY_URL', null).'/FetchPaymentDetails',
+        'fetch_details' => env('MIPAY_URL', null) . '/FetchPaymentDetails',
 
         /*
         |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
         | the payment is a one off one it will returns back with a form
         | URL with card information form.
         */
-        'start_payment' => env('MIPAY_URL', null).'/Payment',
+        'start_payment' => env('MIPAY_URL', null) . '/Payment',
 
         /*
         |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
         | You can start revert your payment if it has successes in
         | a specific time window.
         */
-        'reversal_payment' => env('MIPAY_URL', null).'/ReversalPayment',
+        'reversal_payment' => env('MIPAY_URL', null) . '/ReversalPayment',
     ],
 
     'paydirekt' => [
@@ -130,7 +130,7 @@ return [
         | to login to the provider. If the login is success it returns with
         | a valid access token for the future calls and an expiry date.
         */
-        'get_access_token' => env('PAYDIREKT_URL', null).'/merchantintegration/v1/token/obtain',
+        'get_access_token' => env('PAYDIREKT_URL', null) . '/merchantintegration/v1/token/obtain',
 
         /*
         |--------------------------------------------------------------------------
@@ -139,7 +139,7 @@ return [
         |
         | Use this URL to create or get a checkout from Paydirekt
         */
-        'checkout' => env('PAYDIREKT_URL', null).'/checkout/v1/checkouts',
+        'checkout' => env('PAYDIREKT_URL', null) . '/checkout/v1/checkouts',
 
         /*
         |--------------------------------------------------------------------------
@@ -148,7 +148,7 @@ return [
         |
         | Use this URL to capture a checkout or get a capture details
         */
-        'capture' => env('PAYDIREKT_URL', null).'/checkout/v1/checkouts/%s/captures',
+        'capture' => env('PAYDIREKT_URL', null) . '/checkout/v1/checkouts/%s/captures',
 
         /*
         |--------------------------------------------------------------------------
@@ -158,7 +158,7 @@ return [
         | You can start revert your payment if it has successes in
         | a specific time window.
         */
-        'reversal_payment' => env('PAYDIREKT_URL', null).'/ReversalPayment',
+        'reversal_payment' => env('PAYDIREKT_URL', null) . '/ReversalPayment',
     ],
 
     'tikkie' => [
@@ -191,7 +191,7 @@ return [
         |
         | Use this URL to refund a transaction amount.
         */
-        'refund' => env('TIKKIE_URL', null).'/%s/payments/%s/refunds',
+        'refund' => env('TIKKIE_URL', null) . '/%s/payments/%s/refunds',
     ],
 
     'twikey' => [
@@ -226,7 +226,7 @@ return [
         | the login to the provider. If the login is success it returns with
         | a valid access token for the future calls and an expiry date.
         */
-        'get_access_token' => env('TWIKEY_URL', null).'/creditor',
+        'get_access_token' => env('TWIKEY_URL', null) . '/creditor',
 
         /*
         |--------------------------------------------------------------------------
@@ -237,7 +237,7 @@ return [
         | Authorization in the header. It returns back with a registration
         | form URL.
         */
-        'create_token_url' => env('TWIKEY_URL', null).'/creditor/sign',
+        'create_token_url' => env('TWIKEY_URL', null) . '/creditor/sign',
 
         /*
         |--------------------------------------------------------------------------
@@ -248,7 +248,7 @@ return [
         | the Twikey ID of the token or payment, and it returns back the
         | status and many other information of it.
         */
-        'fetch_token_details' => env('TWIKEY_URL', null).'/creditor/mandate/detail',
+        'fetch_token_details' => env('TWIKEY_URL', null) . '/creditor/mandate/detail',
 
         /*
         |--------------------------------------------------------------------------
@@ -259,7 +259,7 @@ return [
         | the MiPay ID of the token or payment, and it returns back the
         | status and many other information of it.
         */
-        'cancel_token' => env('TWIKEY_URL', null).'/creditor/mandate',
+        'cancel_token' => env('TWIKEY_URL', null) . '/creditor/mandate',
 
         /*
         |--------------------------------------------------------------------------
@@ -270,7 +270,7 @@ return [
         | the payment is a one off one it will returns back with a form
         | URL with card information form.
         */
-        'start_payment' => env('TWIKEY_URL', null).'/creditor/transaction',
+        'start_payment' => env('TWIKEY_URL', null) . '/creditor/transaction',
 
         /*
         |--------------------------------------------------------------------------
@@ -281,7 +281,7 @@ return [
         | Mandate ID of the payment, and it returns back the status and
         | many other information of it.
         */
-        'fetch_details' => env('TWIKEY_URL', null).'/creditor/transaction/detail',
+        'fetch_details' => env('TWIKEY_URL', null) . '/creditor/transaction/detail',
 
         /*
         |--------------------------------------------------------------------------
@@ -290,7 +290,7 @@ return [
         |
         | Use this URL to refund a transaction amount.
         */
-        'refund_payment' => env('TWIKEY_URL', null).'/creditor/transaction/refund',
+        'refund_payment' => env('TWIKEY_URL', null) . '/creditor/transaction/refund',
 
         /*
         |--------------------------------------------------------------------------
@@ -299,7 +299,7 @@ return [
         |
         | Use this URL to reverse a transaction amount.
         */
-        'reversal_payment' => env('TWIKEY_URL', null).'/creditor/transaction',
+        'reversal_payment' => env('TWIKEY_URL', null) . '/creditor/transaction',
     ],
 
 ];

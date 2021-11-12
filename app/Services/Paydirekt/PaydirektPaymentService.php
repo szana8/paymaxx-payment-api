@@ -38,12 +38,12 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
 
     public function authenticate(): string
     {
-        Log::debug('Paydirekt authentication for: '.$this->merchant);
+        Log::debug('Paydirekt authentication for: ' . $this->merchant);
 
         $cacheKey = sprintf(config('providers.paydirekt.redis_key'), \Str::snake($this->merchant));
 
         if (Cache::get($cacheKey)) {
-            Log::debug('Get Paydirekt authentication from cache: '.$cacheKey);
+            Log::debug('Get Paydirekt authentication from cache: ' . $cacheKey);
 
             return Cache::get($cacheKey);
         }
@@ -154,9 +154,9 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
     {
         $token = $this->authenticate();
 
-        Log::info('url: ', [config('providers.paydirekt.checkout').'/'.$external_id]);
+        Log::info('url: ', [config('providers.paydirekt.checkout') . '/' . $external_id]);
         $response = Http::withToken($token)
-            ->get(config('providers.paydirekt.checkout').'/'.$external_id);
+            ->get(config('providers.paydirekt.checkout') . '/' . $external_id);
 
         if ($response->failed()) {
             throw $response->throw()->json();

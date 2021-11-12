@@ -27,7 +27,7 @@ abstract class PayPalService
      */
     public function authenticate(): string
     {
-        Log::debug('PayPal authentication for: '.$this->merchant);
+        Log::debug('PayPal authentication for: ' . $this->merchant);
 
         throw new AuthenticationException('Invalid credentials for PayPal access.');
     }

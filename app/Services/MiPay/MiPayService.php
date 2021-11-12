@@ -39,12 +39,12 @@ abstract class MiPayService
      */
     public function authenticate(): string
     {
-        Log::debug('MiPay authentication for: '.$this->merchant);
+        Log::debug('MiPay authentication for: ' . $this->merchant);
 
         $cacheKey = sprintf(config('providers.mipay.redis_key'), \Str::snake($this->merchant));
 
         if (Cache::get($cacheKey)) {
-            Log::debug('Get MiPay authentication from cache: '.$cacheKey);
+            Log::debug('Get MiPay authentication from cache: ' . $cacheKey);
 
             return Cache::get($cacheKey);
         }

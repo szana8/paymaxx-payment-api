@@ -47,7 +47,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
         // the MiPay specific errors.
         if (! in_array($response->json('response')['ResponseCode'], self::SUCCESS_CODES)) {
             throw new BadRequestHttpException(
-                $response->json('response')['Description'].$response->json('response')['ErrorFields']
+                $response->json('response')['Description'] . $response->json('response')['ErrorFields']
             );
         }
 
@@ -74,7 +74,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
         // Call the MiPay for the fetch token with the endpoint
         // in the providers' configuration.
         $response = Http::withToken($token)
-            ->get(config('providers.mipay.fetch_details').'/'.$paymentToken);
+            ->get(config('providers.mipay.fetch_details') . '/' . $paymentToken);
 
         // If the provider fails for some reason throw the exception
         // to the gateway api.
@@ -87,7 +87,7 @@ class MiPayTokenService extends MiPayService implements TokenServiceInterface, A
         // the MiPay specific errors.
         if (! in_array($response->json('responseCode'), self::SUCCESS_CODES)) {
             throw new BadRequestHttpException(
-                'Error during the fetch: '.$response->json('description')
+                'Error during the fetch: ' . $response->json('description')
             );
         }
 
