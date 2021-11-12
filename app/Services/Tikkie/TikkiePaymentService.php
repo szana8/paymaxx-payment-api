@@ -2,21 +2,21 @@
 
 namespace App\Services\Tikkie;
 
-use App\Presentations\Request\PaymentPresenter;
-use App\Presentations\Request\PaymentRefundPresenter;
-use App\Presentations\Response\CreateOneOffPaymentResponse;
-use App\Presentations\Response\FetchPaymentResponse;
-use App\Presentations\Response\RefundPaymentResponse;
-use App\Presentations\Response\ReversalPaymentResponse;
-use App\Services\Contracts\AuthenticationInterface;
-use App\Services\Contracts\RefundableServiceInterface;
-use App\Services\Contracts\ReversableServiceInterface;
-use App\Services\Contracts\TransactionServiceInterface;
-use App\Transformers\Tikkie\CreateCheckoutTransformer;
-use App\Transformers\Tikkie\CreateRefundTransformer;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Http;
+use App\Presentations\Request\PaymentPresenter;
+use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Response\FetchPaymentResponse;
+use App\Transformers\Tikkie\CreateRefundTransformer;
+use App\Presentations\Request\PaymentRefundPresenter;
+use App\Presentations\Response\RefundPaymentResponse;
+use App\Services\Contracts\RefundableServiceInterface;
+use App\Services\Contracts\ReversableServiceInterface;
+use App\Transformers\Tikkie\CreateCheckoutTransformer;
+use App\Presentations\Response\ReversalPaymentResponse;
+use App\Services\Contracts\TransactionServiceInterface;
+use App\Presentations\Response\CreateOneOffPaymentResponse;
 
 class TikkiePaymentService implements AuthenticationInterface, TransactionServiceInterface, RefundableServiceInterface, ReversableServiceInterface
 {
@@ -61,17 +61,16 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
 
     /**
      * @throws RequestException
-     * @throws AuthenticationException
      */
     public function create(PaymentPresenter $paymentPresenter): CreateOneOffPaymentResponse
     {
-        $token = $this->authenticate();
         $headers = [
-            'X-App-Token' => $token,
+            'X-App-Token' => $this->authenticate(),
             'API-Key' => $this->apiKey,
         ];
 
         $request = (new CreateCheckoutTransformer($paymentPresenter))->transform();
+
         $response = Http::withHeaders($headers)
             ->post(config('providers.tikkie.start_payment'), $request);
 
@@ -95,7 +94,7 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
         $token = $this->authenticate();
 
         $response = Http::withToken($token)
-            ->get(config('providers.tikkie.url') . '/' . $external_id);
+            ->get(config('providers.tikkie.url').'/'.$external_id);
 
         if ($response->failed()) {
             throw $response->throw()->json();
@@ -121,6 +120,7 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
         ];
 
         $request = (new CreateRefundTransformer($paymentRefundPresenter))->transform();
+
         $response = Http::withHeaders($headers)
             ->post(sprintf(
                 config('providers.tikkie.refund'),
@@ -138,13 +138,9 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
             ->setOriginalResponse($response->json());
     }
 
-    public function cancel()
-    {
-        //
-    }
-
     public function reversal(): ReversalPaymentResponse
     {
         // TODO: Implement reversal() method.
+        return new ReversalPaymentResponse();
     }
 }

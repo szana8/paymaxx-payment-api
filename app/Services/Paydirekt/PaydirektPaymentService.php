@@ -14,12 +14,13 @@ use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
 use App\Presentations\Request\PaymentCapturePresenter;
 use App\Presentations\Response\CapturePaymentResponse;
+use App\Services\Contracts\CapturableServiceInterface;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Transformers\Paydirekt\CreateCaptureTransformer;
 use App\Transformers\Paydirekt\CreateCheckoutTransformer;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
 
-class PaydirektPaymentService implements AuthenticationInterface, TransactionServiceInterface
+class PaydirektPaymentService implements AuthenticationInterface, TransactionServiceInterface, CapturableServiceInterface
 {
     /**
      * Default time to live for the redis cache.
@@ -166,10 +167,5 @@ class PaydirektPaymentService implements AuthenticationInterface, TransactionSer
             ->setStatus($response->json('status'))
             ->setOriginalResponse($response->json())
             ->setDetails([]);
-    }
-
-    public function cancel()
-    {
-        //
     }
 }

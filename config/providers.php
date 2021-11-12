@@ -182,7 +182,7 @@ return [
         | the payment is a one off one it will returns back with a form
         | URL with card information form.
         */
-        'start_payment' => env('TIKKIE_URL', null).'/v2/tikkie/paymentrequests',
+        'start_payment' => env('TIKKIE_URL', null),
 
         /*
         |--------------------------------------------------------------------------
@@ -271,6 +271,17 @@ return [
         | URL with card information form.
         */
         'start_payment' => env('TWIKEY_URL', null).'/creditor/transaction',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch payment details URL
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to get the details of a Twikey transaction. Send the
+        | Mandate ID of the payment, and it returns back the status and
+        | many other information of it.
+        */
+        'fetch_details' => env('TWIKEY_URL', null).'/creditor/transaction/detail',
     ],
 
 ];

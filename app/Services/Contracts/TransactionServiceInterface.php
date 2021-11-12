@@ -15,9 +15,4 @@ interface TransactionServiceInterface
      * Implementation of the fetch transaction logic.
      */
     public function fetch(string $external_id);
-
-    /**
-     * Implementation of the transaction cancellation logic.
-     */
-    public function cancel();
 }

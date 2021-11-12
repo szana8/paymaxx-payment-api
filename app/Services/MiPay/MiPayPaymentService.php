@@ -81,9 +81,4 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
             ->setOriginalResponse($response->json())
             ->setDetails($response->json('details'));
     }
-
-    public function cancel()
-    {
-        //
-    }
 }
