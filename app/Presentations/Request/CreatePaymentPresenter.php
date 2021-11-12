@@ -4,7 +4,7 @@ namespace App\Presentations\Request;
 
 use App\Presentations\BasePresentationObject;
 
-class PaymentPresenter extends BasePresentationObject
+class CreatePaymentPresenter extends BasePresentationObject
 {
     /**
      * Customer ID in the request.

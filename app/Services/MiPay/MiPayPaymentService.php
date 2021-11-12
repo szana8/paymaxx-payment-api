@@ -5,9 +5,10 @@ namespace App\Services\MiPay;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Request\FetchPaymentPresenter;
 use App\Presentations\Response\FetchPaymentResponse;
+use App\Presentations\Request\CreatePaymentPresenter;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
 use App\Transformers\MiPay\CreatePaymentRequestTransformer;
@@ -20,7 +21,7 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
      * @throws RequestException
      * @throws AuthenticationException
      */
-    public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
+    public function create(CreatePaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse|CreateOneOffPaymentResponse
     {
         $token = $this->authenticate();
 
@@ -58,12 +59,12 @@ class MiPayPaymentService extends MiPayService implements AuthenticationInterfac
      * @throws RequestException
      * @throws AuthenticationException
      */
-    public function fetch(string $external_id): FetchPaymentResponse
+    public function fetch(FetchPaymentPresenter $fetchPaymentPresenter): FetchPaymentResponse
     {
         $token = $this->authenticate();
 
         $response = Http::withToken($token)
-            ->get(config('providers.mipay.fetch_details') . '/' . $external_id);
+            ->get(config('providers.mipay.fetch_details') . '/' . $fetchPaymentPresenter->getExternalId());
 
         if ($response->failed()) {
             throw $response->throw()->json();

@@ -3,13 +3,13 @@
 namespace App\Transformers\Tikkie;
 
 use Illuminate\Support\Carbon;
-use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Request\CreatePaymentPresenter;
 
 class CreateCheckoutTransformer
 {
-    protected PaymentPresenter $paymentPresenter;
+    protected CreatePaymentPresenter $paymentPresenter;
 
-    public function __construct(PaymentPresenter $paymentPresenter)
+    public function __construct(CreatePaymentPresenter $paymentPresenter)
     {
         $this->paymentPresenter = $paymentPresenter;
     }

@@ -3,12 +3,12 @@
 namespace App\Services\Tikkie;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Request\FetchPaymentPresenter;
 use App\Presentations\Response\FetchPaymentResponse;
 use App\Transformers\Tikkie\CreateRefundTransformer;
+use App\Presentations\Request\CreatePaymentPresenter;
 use App\Presentations\Request\PaymentRefundPresenter;
 use App\Presentations\Response\RefundPaymentResponse;
 use App\Services\Contracts\RefundableServiceInterface;
@@ -63,7 +63,7 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
     /**
      * @throws RequestException
      */
-    public function create(PaymentPresenter $paymentPresenter): CreateOneOffPaymentResponse
+    public function create(CreatePaymentPresenter $paymentPresenter): CreateOneOffPaymentResponse
     {
         $headers = [
             'X-App-Token' => $this->authenticate(),
@@ -88,14 +88,13 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
 
     /**
      * @throws RequestException
-     * @throws AuthenticationException
      */
-    public function fetch(string $external_id): FetchPaymentResponse
+    public function fetch(FetchPaymentPresenter $fetchPaymentPresenter): FetchPaymentResponse
     {
         $token = $this->authenticate();
 
         $response = Http::withToken($token)
-            ->get(config('providers.tikkie.url') . '/' . $external_id);
+            ->get(config('providers.tikkie.url') . '/' . $fetchPaymentPresenter->getExternalId());
 
         if ($response->failed()) {
             throw $response->throw()->json();
@@ -110,7 +109,6 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
 
     /**
      * @throws RequestException
-     * @throws AuthenticationException
      */
     public function refund(PaymentRefundPresenter $paymentRefundPresenter): RefundPaymentResponse
     {

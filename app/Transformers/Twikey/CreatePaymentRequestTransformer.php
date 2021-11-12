@@ -2,13 +2,13 @@
 
 namespace App\Transformers\Twikey;
 
-use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Request\CreatePaymentPresenter;
 
 class CreatePaymentRequestTransformer
 {
-    protected PaymentPresenter $paymentPresenter;
+    protected CreatePaymentPresenter $paymentPresenter;
 
-    public function __construct(PaymentPresenter $paymentPresenter)
+    public function __construct(CreatePaymentPresenter $paymentPresenter)
     {
         $this->paymentPresenter = $paymentPresenter;
     }

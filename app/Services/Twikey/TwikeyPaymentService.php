@@ -5,9 +5,10 @@ namespace App\Services\Twikey;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Presentations\Request\FetchPaymentPresenter;
 use App\Presentations\Response\FetchPaymentResponse;
+use App\Presentations\Request\CreatePaymentPresenter;
 use App\Presentations\Request\PaymentRefundPresenter;
 use App\Presentations\Response\RefundPaymentResponse;
 use App\Services\Contracts\RefundableServiceInterface;
@@ -15,8 +16,10 @@ use App\Services\Contracts\ReversableServiceInterface;
 use App\Presentations\Request\PaymentReversalPresenter;
 use App\Presentations\Response\ReversalPaymentResponse;
 use App\Services\Contracts\TransactionServiceInterface;
+use App\Transformers\Twikey\FetchPaymentRequestTransformer;
 use App\Transformers\Twikey\CreatePaymentRequestTransformer;
 use App\Presentations\Response\CreateTokenizedPaymentResponse;
+use App\Transformers\Twikey\RefundTransactionRequestTransformer;
 use App\Transformers\Twikey\ReversalTransactionRequestTransformer;
 
 class TwikeyPaymentService extends TwikeyService implements AuthenticationInterface, TransactionServiceInterface, RefundableServiceInterface, ReversableServiceInterface
@@ -27,7 +30,7 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
      * @throws RequestException
      * @throws AuthenticationException
      */
-    public function create(PaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse
+    public function create(CreatePaymentPresenter $paymentPresenter): CreateTokenizedPaymentResponse
     {
         // Provider authentication id needed and get the token for
         // the further requests.
@@ -58,19 +61,19 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
     }
 
     /**
-     * @param string $external_id
+     * @param FetchPaymentPresenter $fetchPaymentPresenter
      * @return FetchPaymentResponse
      * @throws AuthenticationException
      * @throws RequestException
      */
-    public function fetch(string $external_id): FetchPaymentResponse
+    public function fetch(FetchPaymentPresenter $fetchPaymentPresenter): FetchPaymentResponse
     {
         // Provider authentication id needed and get the token for
         // the further requests.
         $token = $this->authenticate();
 
         // Make the Twikey specific request array
-        $request = (new CreatePaymentRequestTransformer($external_id))->transform();
+        $request = (new FetchPaymentRequestTransformer($fetchPaymentPresenter))->transform();
 
         // Call the Twikey the start the payment with an authorization
         // token.
@@ -93,6 +96,9 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
             ->setDetails([]);
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function refund(PaymentRefundPresenter $paymentRefundPresenter): RefundPaymentResponse
     {
         // Provider authentication id needed and get the token for
@@ -100,7 +106,7 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
         $token = $this->authenticate();
 
         // Make the Twikey specific request array
-        $request = (new CreatePaymentRequestTransformer($paymentRefundPresenter))->transform();
+        $request = (new RefundTransactionRequestTransformer($paymentRefundPresenter))->transform();
 
         // Call the Twikey the start the payment with an authorization
         // token.
@@ -122,6 +128,9 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
             ->setOriginalResponse($response->json());
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function reversal(PaymentReversalPresenter $paymentReversalPresenter): ReversalPaymentResponse
     {
         // Provider authentication id needed and get the token for

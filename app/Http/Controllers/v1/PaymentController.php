@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Managers\PaymentServiceManager;
-use App\Presentations\Request\PaymentPresenter;
+use App\Presentations\Request\FetchPaymentPresenter;
+use App\Presentations\Request\CreatePaymentPresenter;
 
 class PaymentController extends Controller
 {
@@ -27,12 +28,12 @@ class PaymentController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $response = $this->paymentServiceManager
             ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
-            ->create(new PaymentPresenter($request->get('data')));
+            ->create(new CreatePaymentPresenter($request->get('data')));
 
         return response()->json($response);
     }
@@ -40,7 +41,8 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Request $request
+     * @param string $external_id
      * @return JsonResponse
      */
     public function show(Request $request, string $external_id): JsonResponse
@@ -48,7 +50,7 @@ class PaymentController extends Controller
         $response = $this->paymentServiceManager
             ->driver(Str::lower($request->get('provider')))
             ->withCredentials($request->get('credentials'))
-            ->fetch($external_id);
+            ->fetch(new FetchPaymentPresenter($request->all(), $external_id));
 
         return response()->json($response);
     }
