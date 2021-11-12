@@ -18,6 +18,10 @@ class PaymentRefundPresenter extends BasePresentationObject
 
     protected string|null $externalId;
 
+    protected string|null $iban;
+
+    protected string|null $bic;
+
     protected TransactionPresenter $transaction;
 
     public function __construct(array $data)
@@ -65,5 +69,21 @@ class PaymentRefundPresenter extends BasePresentationObject
     public function getTransaction(): TransactionPresenter
     {
         return $this->transaction;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIban(): ?string
+    {
+        return $this->iban;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBic(): ?string
+    {
+        return $this->bic;
     }
 }

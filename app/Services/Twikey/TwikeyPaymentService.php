@@ -5,7 +5,6 @@ namespace App\Services\Twikey;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
-use Symfony\Component\HttpFoundation\Response;
 use App\Presentations\Request\PaymentPresenter;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Presentations\Response\FetchPaymentResponse;
@@ -13,10 +12,12 @@ use App\Presentations\Request\PaymentRefundPresenter;
 use App\Presentations\Response\RefundPaymentResponse;
 use App\Services\Contracts\RefundableServiceInterface;
 use App\Services\Contracts\ReversableServiceInterface;
+use App\Presentations\Request\PaymentReversalPresenter;
 use App\Presentations\Response\ReversalPaymentResponse;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Transformers\Twikey\CreatePaymentRequestTransformer;
 use App\Presentations\Response\CreateTokenizedPaymentResponse;
+use App\Transformers\Twikey\ReversalTransactionRequestTransformer;
 
 class TwikeyPaymentService extends TwikeyService implements AuthenticationInterface, TransactionServiceInterface, RefundableServiceInterface, ReversableServiceInterface
 {
@@ -99,13 +100,13 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
         $token = $this->authenticate();
 
         // Make the Twikey specific request array
-        $request = (new CreatePaymentRequestTransformer($external_id))->transform();
+        $request = (new CreatePaymentRequestTransformer($paymentRefundPresenter))->transform();
 
         // Call the Twikey the start the payment with an authorization
         // token.
-        $response = Http::withHeaders(['Authorization' => $token])
+        $response = Http::wixthHeaders(['Authorization' => $token])
             ->asForm()
-            ->post(config('providers.twikey.fetch_details'), $request);
+            ->post(config('providers.twikey.refund_payment'), $request);
 
         // If the provider fails for some reason throw the exception
         // to the gateway api.
@@ -115,15 +116,35 @@ class TwikeyPaymentService extends TwikeyService implements AuthenticationInterf
 
         // Else create a non provider specific standard response
         // for the gateway api.
-        return (new FetchPaymentResponse())
-            ->setId($response->json('Entries')[0]['id'])
-            ->setStatus($response->json('status')[0]['state'])
-            ->setOriginalResponse($response->json())
-            ->setDetails([]);
+        return (new RefundPaymentResponse())
+            ->setId($paymentRefundPresenter->getId())
+            ->setExternalId($response->json('Entries')[0]['id'])
+            ->setOriginalResponse($response->json());
     }
 
-    public function reversal(): ReversalPaymentResponse
+    public function reversal(PaymentReversalPresenter $paymentReversalPresenter): ReversalPaymentResponse
     {
-        // TODO: Implement reversal() method.
+        // Provider authentication id needed and get the token for
+        // the further requests.
+        $token = $this->authenticate();
+
+        // Make the Twikey specific request array
+        $request = (new ReversalTransactionRequestTransformer($paymentReversalPresenter))->transform();
+
+        // Call the Twikey the start the payment with an authorization
+        // token.
+        $response = Http::wixthHeaders(['Authorization' => $token])
+            ->asForm()
+            ->delete(config('providers.twikey.reversal_payment'), $request);
+
+        // If the provider fails for some reason throw the exception
+        // to the gateway api.
+        if ($response->failed()) {
+            throw $response->throw()->json();
+        }
+
+        // Else create a non provider specific standard response
+        // for the gateway api.
+        return new ReversalPaymentResponse();
     }
 }

@@ -274,7 +274,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Fetch payment details URL
+        | Fetch payment details URL (POST)
         |--------------------------------------------------------------------------
         |
         | Use this URL to get the details of a Twikey transaction. Send the
@@ -282,6 +282,24 @@ return [
         | many other information of it.
         */
         'fetch_details' => env('TWIKEY_URL', null).'/creditor/transaction/detail',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Refund payment URL (POST)
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to refund a transaction amount.
+        */
+        'refund_payment' => env('TWIKEY_URL', null).'/creditor/transaction/refund',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Reversal payment URL (DELETE)
+        |--------------------------------------------------------------------------
+        |
+        | Use this URL to reverse a transaction amount.
+        */
+        'reversal_payment' => env('TWIKEY_URL', null).'/creditor/transaction',
     ],
 
 ];

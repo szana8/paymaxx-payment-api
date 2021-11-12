@@ -14,6 +14,7 @@ use App\Presentations\Response\RefundPaymentResponse;
 use App\Services\Contracts\RefundableServiceInterface;
 use App\Services\Contracts\ReversableServiceInterface;
 use App\Transformers\Tikkie\CreateCheckoutTransformer;
+use App\Presentations\Request\PaymentReversalPresenter;
 use App\Presentations\Response\ReversalPaymentResponse;
 use App\Services\Contracts\TransactionServiceInterface;
 use App\Presentations\Response\CreateOneOffPaymentResponse;
@@ -138,7 +139,7 @@ class TikkiePaymentService implements AuthenticationInterface, TransactionServic
             ->setOriginalResponse($response->json());
     }
 
-    public function reversal(): ReversalPaymentResponse
+    public function reversal(PaymentReversalPresenter $paymentReversalPresenter): ReversalPaymentResponse
     {
         // TODO: Implement reversal() method.
         return new ReversalPaymentResponse();
