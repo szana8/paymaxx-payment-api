@@ -16,8 +16,8 @@ class CreateRefundTransformer
     public function transform(): array
     {
         $data = [
-            'amountInCents' => $this->paymentPresenter->getTransaction()->getAmount(),
-            'description' => $this->paymentPresenter->getTransaction()->getDescription(),
+            'amountInCents' => $this->paymentPresenter->getAmount(),
+            'description' => $this->paymentPresenter->getDescription(),
             'referenceId' => str_replace('-', '', $this->paymentPresenter->getId()),
         ];
 

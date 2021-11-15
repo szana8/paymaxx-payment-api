@@ -22,21 +22,17 @@ class PaymentRefundPresenter extends BasePresentationObject
 
     protected string|null $bic;
 
-    protected TransactionPresenter $transaction;
+    protected int|null $amount;
+
+    protected string|null $description;
 
     public function __construct(array $data)
     {
         $this->id = $data['id'];
         $this->externalId = $data['externalId'];
         $this->paymentToken = $data['paymentToken'] ?? null;
-
-        $this->transaction = new TransactionPresenter(
-            $data['transaction']['reference'],
-            $data['transaction']['description'],
-            $data['transaction']['amount'],
-            $data['transaction']['currency'],
-            $data['transaction']['lines'],
-        );
+        $this->amount = $data['amount'] ?? null;
+        $this->description = $data['description'] ?? null;
     }
 
     /**
@@ -64,14 +60,6 @@ class PaymentRefundPresenter extends BasePresentationObject
     }
 
     /**
-     * @return array
-     */
-    public function getTransaction(): TransactionPresenter
-    {
-        return $this->transaction;
-    }
-
-    /**
      * @return string|null
      */
     public function getIban(): ?string
@@ -85,5 +73,21 @@ class PaymentRefundPresenter extends BasePresentationObject
     public function getBic(): ?string
     {
         return $this->bic;
+    }
+
+    /**
+     * @return mixed|string|null
+     */
+    public function getDescription(): mixed
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return int|mixed|null
+     */
+    public function getAmount(): mixed
+    {
+        return $this->amount;
     }
 }

@@ -19,8 +19,8 @@ class RefundTransactionRequestTransformer
             'id' => $this->paymentRefundPresenter->getId(),
             'iban' => $this->paymentRefundPresenter->getIban(),
             'bic' => $this->paymentRefundPresenter->getBic(),
-            'message' => $this->paymentRefundPresenter->getTransaction()->getDescription(),
-            'amount' => $this->paymentRefundPresenter->getTransaction()->getAmount(),
+            'message' => $this->paymentRefundPresenter->getDescription(),
+            'amount' => $this->paymentRefundPresenter->getAmount(),
         ];
     }
 }
