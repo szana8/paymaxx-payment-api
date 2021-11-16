@@ -301,5 +301,16 @@ return [
         */
         'reversal_payment' => env('TWIKEY_URL', null) . '/creditor/transaction',
     ],
+    'buckaroo' => [
 
+        /*
+        |--------------------------------------------------------------------------
+        | Twikey provider URL
+        |--------------------------------------------------------------------------
+        |
+        | This URL is used to call the Twikey provider services. This is a base
+        | URL, so you need to specify what service you want to call.
+        */
+        'url' => env('BUCKAROO_URL', null),
+    ],
 ];

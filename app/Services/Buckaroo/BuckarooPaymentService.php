@@ -2,16 +2,26 @@
 
 namespace App\Services\Buckaroo;
 
-use App\Services\Contracts\AuthenticationInterface;
+use Illuminate\Support\Facades\Http;
 use App\Presentations\Request\FetchPaymentPresenter;
 use App\Presentations\Request\CreatePaymentPresenter;
 use App\Services\Contracts\TransactionServiceInterface;
+use App\Transformers\Buckaroo\CreatePaymentRequestTransformer;
 
-class BuckarooPaymentService extends BuckarooService implements AuthenticationInterface, TransactionServiceInterface
+class BuckarooPaymentService extends BuckarooService implements TransactionServiceInterface
 {
     public function create(CreatePaymentPresenter $paymentPresenter)
     {
-        return response()->json($paymentPresenter->toArray());
+        $hmac = $this->authenticate($paymentPresenter);
+
+        $request = new CreatePaymentRequestTransformer($paymentPresenter);
+
+        $response = Http::withHeaders([
+            'Authorization' => $hmac,
+            'Content-Type' => 'application/json',
+        ])->post(config('providers.buckaroo.url'), $request->transform());
+
+        return $response->body();
     }
 
     public function fetch(FetchPaymentPresenter $fetchPaymentPresenter)
