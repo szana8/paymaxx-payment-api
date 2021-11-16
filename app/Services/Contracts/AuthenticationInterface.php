@@ -12,5 +12,5 @@ interface AuthenticationInterface
     /**
      * Register the credentials for the authentication.
      */
-    public function withCredentials(array $credentials);
+    public function withCredentials(array $credentials): self;
 }

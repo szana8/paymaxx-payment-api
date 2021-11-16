@@ -28,6 +28,8 @@ class CreatePaymentPresenter extends BasePresentationObject
 
     protected ThreeDSecurePresenter $threeDSecure;
 
+    protected IdealPresenter $ideal;
+
     public function __construct(array $data)
     {
         $this->id = $data['id'];
@@ -53,6 +55,10 @@ class CreatePaymentPresenter extends BasePresentationObject
 
         if (isset($data['3DSecure'])) {
             $this->threeDSecure = new ThreeDSecurePresenter($data['3DSecure']);
+        }
+
+        if (isset($data['ideal'])) {
+            $this->ideal = new IdealPresenter($data['ideal']);
         }
     }
 
@@ -118,5 +124,13 @@ class CreatePaymentPresenter extends BasePresentationObject
     public function getThreeDSecure(): ThreeDSecurePresenter
     {
         return $this->threeDSecure;
+    }
+
+    /**
+     * @return IdealPresenter
+     */
+    public function getIdeal(): IdealPresenter
+    {
+        return $this->ideal;
     }
 }
